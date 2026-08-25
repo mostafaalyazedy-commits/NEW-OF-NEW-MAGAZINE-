@@ -3073,23 +3073,112 @@ body.cat-world::before{opacity:.40}
 
 
 /* ============================================================
-   V42 — DEDICATED MOBILE MAGAZINE ENGINE
-   Mobile is composed as a magazine, not a squeezed desktop page.
-   Desktop rules above stay intact; this layer only activates <=700px.
+   V44 — MOBILE SPOTLIGHT + PRICE ORDER FIX
+   1) Spotlight on phones becomes a clean vertical story:
+      lead first, supports below, no squeezed side columns.
+   2) Prices render in stable LTR numeric order inside Arabic UI.
    ============================================================ */
+.price-figure{display:inline-flex;align-items:baseline;gap:0;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.price-inline .price,.price-inline .old,.new-line .price,.old-line .old{unicode-bidi:isolate}
 @media(max-width:700px){
-  :root{--m-gap:10px;--m-radius:16px;--m-dock-h:72px}
-  .shop-header{padding:7px 8px 0!important}.header-main{gap:7px!important}.search{height:42px!important;border-radius:13px!important;font-size:12px!important}.icon-btn{height:42px!important;min-width:42px!important;border-radius:12px!important}.chips-row{padding:6px 0!important}.chips{gap:6px!important}.chip{padding:6px 11px!important;font-size:11px!important}
-  .results-bar{margin:8px 0 10px!important;padding:8px 0!important;border-top:0!important;border-bottom:1px solid var(--cat-border)!important}.result-count{font-size:11.5px!important;color:#52657A!important}.tools{margin-inline-start:auto!important}.view-toggle{display:none!important}.sort{height:36px!important;max-width:148px!important;border-radius:11px!important;font-size:11px!important;padding-inline:8px!important}.active-filters{gap:5px!important;margin-bottom:7px!important}.af{font-size:10px!important;padding:5px 7px!important}
-  .shop-main{padding:8px 8px calc(150px + env(safe-area-inset-bottom))!important}.home-xp{margin-bottom:10px!important}.hx-block,.story-block{margin:10px 0 14px!important}.grid-break{margin-block:14px!important}.all-heading{margin:14px 2px 8px!important}.hx-head,.mod-head,.section-inline-head{margin-bottom:8px!important}.hx-head h2,.all-heading h2,.mod-head h3,.section-inline-head h3{font-size:16px!important;line-height:1.25!important}.eyebrow{font-size:8.5px!important;letter-spacing:.10em!important}.hx-link{font-size:10px!important;padding:5px 8px!important}
-  .hero{margin:2px 0 12px!important;border-radius:16px!important;box-shadow:0 10px 24px rgba(10,42,77,.11)!important}.hero-art{--ocean-ar:1.8!important}
-  .hx-brands{padding:12px 8px 10px!important;margin:10px 0 12px!important;border-radius:16px!important}.hx-brands .hx-head{padding-inline:2px!important}.brand-marquee{padding:2px 0!important;overflow:visible!important}.brand-track{animation:none!important;transform:none!important;display:grid!important;width:100%!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px 6px!important;justify-items:center!important}.brand-item{width:100%!important;min-width:0!important}.brand-ring{width:min(17vw,72px)!important;height:min(17vw,72px)!important;aspect-ratio:1!important}.brand-item strong{font-size:9px!important;line-height:1.25!important;margin-top:5px!important;min-height:22px!important}.brand-marquee[data-brand-count="1"] .brand-track,.brand-marquee[data-brand-count="2"] .brand-track,.brand-marquee[data-brand-count="3"] .brand-track{grid-template-columns:repeat(3,minmax(0,92px))!important;justify-content:center!important}.brand-marquee[data-brand-count="4"] .brand-track,.brand-marquee[data-brand-count="5"] .brand-track{grid-template-columns:repeat(5,minmax(0,82px))!important;justify-content:center!important}.brand-marquee[data-brand-count="1"] .brand-ring,.brand-marquee[data-brand-count="2"] .brand-ring,.brand-marquee[data-brand-count="3"] .brand-ring{width:78px!important;height:78px!important}
-  .m-rail-section{margin:12px -8px 16px;padding:12px 8px 14px;overflow:hidden}.m-rail-section[data-kind="saving"]{background:linear-gradient(180deg,rgba(31,132,56,.07),rgba(255,255,255,0))}.m-rail-section[data-kind="combo"]{background:linear-gradient(180deg,rgba(255,209,102,.13),rgba(255,255,255,0))}.m-rail-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:0 2px 8px}.m-rail-head h3{margin:0;font-size:16px;line-height:1.25;font-weight:950;color:var(--cat-deep)}.m-rail-head span{display:block;font-size:8.5px;font-weight:900;color:var(--cat-accent);letter-spacing:.09em}.m-rail{display:flex!important;gap:10px!important;overflow-x:auto!important;overscroll-behavior-inline:contain;scroll-snap-type:x proximity;padding:2px 8px 5px 2px;scrollbar-width:none}.m-rail::-webkit-scrollbar{display:none}.m-rail>.product-tile{flex:0 0 78vw!important;max-width:310px!important;scroll-snap-align:start!important;min-width:0!important}.m-rail[data-compact="1"]>.product-tile{flex-basis:44vw!important;max-width:185px!important}.m-rail .shelf-card{width:100%!important;min-height:0!important;border-radius:16px!important;padding:8px!important}.m-rail .shelf-img{height:145px!important;border-radius:12px!important}.m-rail[data-compact="1"] .shelf-img{height:128px!important}.m-rail .shelf-card strong{font-size:11px!important;min-height:32px!important}.m-rail .product-action{margin-top:6px!important}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px 8px!important}.grid.list{grid-template-columns:repeat(2,minmax(0,1fr))!important}.grid .product-tile{min-width:0!important}.card{border-radius:16px!important;padding:7px!important;gap:6px!important;box-shadow:0 7px 18px rgba(16,35,61,.06)!important}.card-img{border-radius:12px!important;aspect-ratio:1/1.02!important}.card-img img{max-width:96%!important;max-height:96%!important}.card-body{gap:4px!important}.card-name{font-size:11px!important;line-height:1.4!important;min-height:31px!important;-webkit-line-clamp:2!important}.card-sub{display:none!important}.price-stack{gap:3px!important}.price-line{gap:4px!important}.price-label{font-size:8px!important;min-width:28px!important;padding:3px 5px!important}.old-line .old{font-size:9px!important}.new-line .price{font-size:18px!important}.save{font-size:8.5px!important;padding:3px 6px!important;white-space:nowrap!important}.badge{top:6px!important;right:6px!important;font-size:9px!important;padding:4px 6px!important;border-radius:9px!important;transform:scale(.88);transform-origin:top right}.offer-seal{transform:scale(.78)!important;transform-origin:top right!important}.product-action{margin-top:6px!important;gap:5px!important}.product-action .add{min-height:38px!important;width:100%!important;font-size:10.5px!important;border-radius:10px!important;padding:0 7px!important}.product-action .qty{min-height:38px!important;width:100%!important;grid-template-columns:36px 1fr 36px!important}
-  .mod-feature,.mod-saving,.mod-combo,.mod-brand,.mod-discount,.mod-spotlight,.mod-finale{border-radius:0!important}.mod-divider{display:none!important}.m-spotlight{margin:14px -8px 16px!important;padding:16px 8px 18px!important;background:linear-gradient(160deg,var(--ch-deep,var(--cat-deep)),var(--navy2))!important;color:#fff}.m-spotlight .m-spotlight-card{max-width:340px;margin:auto}.m-spotlight .shelf-card{border:0!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important}.m-spotlight .shelf-img{height:220px!important}.m-spotlight .m-rail-head h3{color:#fff!important}.m-spotlight .m-rail-head span{color:var(--ch-light,var(--cat-light))!important}.grid-complete{margin-top:10px!important;padding:10px 8px 2px!important;font-size:10px!important}
-  .floating-cart{display:none!important}.smart-cart{left:8px!important;right:8px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 16px 42px rgba(6,28,54,.28)!important}.smart-cart-inner{min-height:64px!important;padding:9px 10px!important;gap:8px!important}.cart-summary{cursor:pointer;min-width:0}.cart-summary strong{font-size:10px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cart-summary b{font-size:16px!important}.order-btn{min-height:46px!important;padding:0 13px!important;border-radius:12px!important;font-size:11px!important;white-space:nowrap!important}.back-top{bottom:calc(88px + env(safe-area-inset-bottom))!important;left:10px!important;width:42px!important;height:42px!important}.toast{bottom:calc(92px + env(safe-area-inset-bottom))!important}
+  .mod-spotlight .sl-stage{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important}
+  .mod-spotlight .product-tile.lead-tile{width:100%!important;max-width:none!important;order:1}
+  .mod-spotlight .sl-lead{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;justify-items:center!important;text-align:center!important}
+  .mod-spotlight .sl-lead-img{width:min(72vw,290px)!important;max-width:100%!important;margin-inline:auto!important}
+  .mod-spotlight .sl-lead-copy{width:100%!important;align-items:center!important;text-align:center!important;gap:8px!important}
+  .mod-spotlight .sl-lead-copy strong{font-size:clamp(17px,6.1vw,28px)!important;line-height:1.26!important}
+  .mod-spotlight .sl-lead-copy .feat-sub{font-size:13px!important;line-height:1.45!important;opacity:.92}
+  .mod-spotlight .price-inline{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;width:100%!important}
+  .mod-spotlight .price-inline .old{font-size:14px!important}
+  .mod-spotlight .price-inline .price{align-self:center!important;font-size:28px!important}
+  .mod-spotlight .save{align-self:center!important}
+  .mod-spotlight .sl-side{order:2;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important;min-width:0!important}
+  .mod-spotlight .sl-side .product-tile{min-width:0!important;align-self:stretch!important}
+  .mod-spotlight .sl-side .shelf-card{min-width:0!important;padding:8px!important;border-radius:16px!important}
+  .mod-spotlight .sl-side .shelf-img{height:116px!important;border-radius:12px!important}
+  .mod-spotlight .sl-side .shelf-card strong{font-size:11px!important;line-height:1.38!important;min-height:30px!important;-webkit-line-clamp:2!important}
+  .mod-spotlight .sl-side .price-inline{gap:5px!important}
+  .mod-spotlight .sl-side .price-inline .price{font-size:18px!important}
+  .mod-spotlight .sl-side .price-inline .old{font-size:10.5px!important}
+  .mod-spotlight .sl-side .save{font-size:10px!important;padding:4px 8px 4px 6px!important}
+  .mod-spotlight .product-action{margin-top:8px!important}
+  .mod-spotlight .product-action .add{min-height:46px!important;font-size:14px!important;border-radius:14px!important}
 }
-@media(max-width:390px){.brand-track{grid-template-columns:repeat(3,minmax(0,1fr))!important}.m-rail>.product-tile{flex-basis:82vw!important}.m-rail[data-compact="1"]>.product-tile{flex-basis:47vw!important}.new-line .price{font-size:17px!important}}
+@media(max-width:390px){
+  .mod-spotlight .sl-side{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .mod-spotlight .sl-side .shelf-img{height:108px!important}
+  .mod-spotlight .sl-side .shelf-card strong{font-size:10.5px!important}
+  .mod-spotlight .product-action .add{font-size:13px!important}
+}
+
+
+/* ============================================================
+   V45 — SPOTLIGHT LEAD CONTAINER TO ROUNDED SQUARE
+   Fix tall-pack hero clipping / awkward circle composition.
+   ============================================================ */
+.mod-spotlight .sl-lead-img{
+  border-radius:28px!important;
+  aspect-ratio:1/1!important;
+  overflow:visible!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,248,252,.98)) padding-box,
+    radial-gradient(82% 82% at 50% 18%,rgba(255,255,255,.98) 0%,rgba(241,247,252,.96) 72%,rgba(231,239,246,.94) 100%) border-box!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    0 0 0 10px rgba(255,255,255,.07),
+    0 26px 60px -18px rgba(0,0,0,.62)!important;
+}
+.mod-spotlight .sl-lead-img::after{
+  left:14%!important;
+  right:14%!important;
+  bottom:4%!important;
+  height:8%!important;
+}
+.mod-spotlight .sl-lead-img img{
+  max-width:86%!important;
+  max-height:86%!important;
+}
+@media(max-width:700px){
+  .mod-spotlight .sl-lead-img{
+    width:min(78vw,320px)!important;
+    margin-inline:auto!important;
+    border-radius:24px!important;
+  }
+  .mod-spotlight .sl-lead-img img{
+    max-width:84%!important;
+    max-height:84%!important;
+  }
+}
+
+
+
+/* ---------- V47: CATEGORY HEADER CLEANUP ----------
+   Remove the redundant "الكل" eyebrow in the category header and elevate the
+   actual category title so the chapter opener reads cleaner and more premium. */
+.chapter-open .ch-eyebrow{display:none!important}
+.chapter-open .ch-inner{align-items:center!important;justify-content:flex-start!important}
+.chapter-open .ch-lead{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;width:100%}
+.chapter-open .ch-rule{
+  display:block!important;
+  width:74px;height:4px;margin:0 0 10px!important;border-radius:999px;
+  background:linear-gradient(90deg,#fff 0%,var(--cat-light) 72%,rgba(255,255,255,.55) 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.10),0 10px 22px rgba(255,255,255,.12);
+}
+.chapter-open .ch-title{
+  font-size:clamp(30px,4.2vw,50px)!important;
+  line-height:1.03!important;
+  font-weight:950!important;
+  letter-spacing:-.045em!important;
+  text-wrap:balance;
+  color:#fff!important;
+  text-shadow:0 4px 18px rgba(0,0,0,.26),0 1px 0 rgba(255,255,255,.05)!important;
+}
+@media(max-width:700px){
+  .chapter-open{margin:4px 0 12px!important;border-radius:18px!important}
+  .chapter-open .ch-inner{padding:15px 14px!important;min-height:0!important}
+  .chapter-open .ch-rule{width:56px;height:3px;margin-bottom:8px!important}
+  .chapter-open .ch-title{font-size:clamp(27px,8vw,36px)!important;line-height:1.06!important}
+}
 
 </style>
 </head>
@@ -3659,9 +3748,11 @@ function priceLabels(){return{before:ui('price_before_label','قبل'),after:ui(
 function priceNumber(v){
   const s=price(v),i=s.indexOf('.');
   const whole=i<0?s:s.slice(0,i),frac=i<0?'':s.slice(i),cur=currency();
-  return `<b class="pn-int">${esc(whole)}</b>`
+  return `<span class="price-figure" dir="ltr">`
+    +`<b class="pn-int">${esc(whole)}</b>`
     +(frac?`<i class="pn-dec">${esc(frac)}</i>`:'')
-    +(cur?`<u class="pn-cur">${esc(cur)}</u>`:'');
+    +(cur?`<u class="pn-cur">${esc(cur)}</u>`:'')
+    +`</span>`;
 }
 /* The small word on a percentage seal is LIFTED FROM the backend's own badge
    template (e.g. "خصم {discount}%" -> "خصم") rather than invented here, so a
@@ -3872,13 +3963,8 @@ function renderIntro(){
     el.hidden=false;el.className='shop-intro chapter-open';
     el.innerHTML=`<div class="ch-inner">
         <div class="ch-lead">
-          <span class="ch-eyebrow"><i class="ch-dot" aria-hidden="true"></i>${esc(ui('chip_all'))}</span>
+          <span class="ch-rule" aria-hidden="true"></span>
           <h1 class="ch-title">${esc(c?(c.category_name_ar||c.category_name_en||''):'')}</h1>
-        </div>
-        <div class="ch-meta">
-          <span class="ch-stat"><b>${esc(String(res.length))}</b><span>${esc(tpl(ui('results_count_template'),{count:''}).replace(/\s+/g,' ').trim())}</span></span>
-          ${max?`<span class="ch-stat ch-stat-hot"><b>${esc(String(max))}%</b><span>${esc(ui('badge_discount_template').replace('{discount}','').replace('%','').trim()||ui('chip_hot'))}</span></span>`:''}
-          ${best>0?`<span class="ch-stat ch-stat-save"><b>${esc(price(best))}</b><span>${esc(currency())}</span></span>`:''}
         </div>
       </div>`;
     return;
@@ -4280,14 +4366,6 @@ function finaleBlock(pool,used){
   </section>`};
 }
 
-
-function isMobileMagazine(){return !!(window.matchMedia&&window.matchMedia('(max-width:700px)').matches)}
-function mobileRailBlock(kind,picks,title,eyebrow,compact=false){if(!picks||!picks.length)return null;return `<section class="m-rail-section" data-kind="${esc(kind)}"><div class="m-rail-head"><div><span>${esc(eyebrow||ui('chapter_eyebrow','اكتشف'))}</span><h3>${esc(title)}</h3></div></div><div class="m-rail" data-compact="${compact?'1':'0'}">${picks.map(shelfCard).join('')}</div></section>`}
-function mobileFeatureBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&e.price>0&&productImage(e.p)),5,{maxPerBrand:1,maxPerFamily:1});if(picks.length<3)return null;return{picks,html:mobileRailBlock('feature',picks,chapterTitle('feature'),ui('deals_eyebrow','مختارة لك'),false)}}
-function mobileSavingBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&e.save>0&&productImage(e.p)).sort((a,b)=>b.save-a.save),5,{maxPerBrand:2,maxPerFamily:1});if(picks.length<3)return null;return{picks,html:mobileRailBlock('saving',picks,chapterTitle('saving'),ui('saving_eyebrow','وفر أكثر'),true)}}
-function mobileComboBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&isComboOffer(e)&&productImage(e.p)),5,{maxPerBrand:2,maxPerFamily:1});if(picks.length<3)return null;return{picks,html:mobileRailBlock('combo',picks,chapterTitle('combo'),ui('combo_eyebrow','قيمة مضاعفة'),true)}}
-function mobileSpotlightBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&e.price>0&&productImage(e.p)),1,{maxPerBrand:1,maxPerFamily:1});if(!picks.length)return null;const e=picks[0];return{picks,html:`<section class="m-spotlight" data-energy="peak" style="${chapterVars('spotlight')}"><div class="m-rail-head"><div><span>${esc(ui('spotlight_eyebrow','اختيار مميز'))}</span><h3>${esc(chapterTitle('spotlight'))}</h3></div></div><div class="m-spotlight-card">${shelfCard(e)}</div></section>`}}
-
 /* ---------- THE PLAN ----------
    Modules are chosen by priority against real data, then paced: a curated
    module never follows another directly, and two HIGH-energy moments are always
@@ -4313,16 +4391,6 @@ function buildComposition(list){
     return true;
   };
   const mk=(kind,fn)=>{const g=(...a)=>fn(...a);g.kind=kind;return g};
-
-  if(isMobileMagazine()&&mode==='category'){
-    place(8,mk('feature',(p,u)=>mobileFeatureBlock(p,u)));
-    place(14,mk('saving',(p,u)=>mobileSavingBlock(p,u)));
-    place(20,mk('combo',(p,u)=>mobileComboBlock(p,u)));
-    let wowMid=null,wowFinal=null;
-    if(scope>=22){const sp=mobileSpotlightBlock(alive(),used);if(sp){sp.picks.forEach(e=>used.add(e.id));wowMid=sp.html}}
-    const remaining=list.filter(x=>!used.has(x.e.id));
-    return {mode,modules,remaining,used,key:gridKey(),scope,wowMid,wowFinal};
-  }
 
   if(mode==='category'){
     /* priority order from the brief; each is skipped when the data is thin */
@@ -4402,19 +4470,6 @@ function renderComposition(comp,from,to,cur){
   const mods=comp.modules;
   const rhythmActive=comp.mode==='category' && comp.scope>=12;
 
-  if(isMobileMagazine()&&comp.mode==='category'){
-    let i=from;const mobileCaps=[6,8,8,10];
-    if(from===0&&mods.length&&cur.mod===0)parts.push(wrapBreak(mods[cur.mod++].html));
-    while(i<end){
-      if(cur.started&&cur.partial===0){if(comp.wowMid&&!cur.wowMid&&i>=rem.length*0.50){parts.push(wrapBreak(comp.wowMid));cur.wowMid=true}else if(cur.mod<mods.length){parts.push(wrapBreak(mods[cur.mod++].html))}}
-      const cap=mobileCaps[cur.chapter%mobileCaps.length],chunk=Math.min(cap-cur.partial,end-i),tone=cur.chapter%3;
-      for(let k=0;k<chunk;k++)parts.push(card(rem[i+k].e,i+k,tone));
-      i+=chunk;cur.partial+=chunk;cur.started=true;if(cur.partial>=cap){cur.chapter++;cur.partial=0}
-    }
-    if(end>=rem.length&&comp.wowMid&&!cur.wowMid){parts.push(wrapBreak(comp.wowMid));cur.wowMid=true}
-    return parts.join('');
-  }
-
   /* Search/filtered/home-without-modules remain structurally simple. */
   if(!rhythmActive && !mods.length && !comp.wowMid && !comp.wowFinal){
     for(let i=from;i<end;i++)parts.push(card(rem[i].e,i,0));
@@ -4467,8 +4522,8 @@ function renderComposition(comp,from,to,cur){
 let GRID_STATE=null;
 /* Identity of the current result set — when it changes the grid is rebuilt,
    when only the page grows the grid is appended to. */
-function gridKey(){return [isMobileMagazine()?'mobile':'desktop',SHOP.q,SHOP.cat,SHOP.hot,SHOP.discMin,SHOP.price,SHOP.offer,SHOP.sort,SHOP.view,MISSION?JSON.stringify(MISSION.type)+MISSION.value:''].join('|')}
-function renderResults(){SHOP.page=Math.max(1,SHOP.page);if(isMobileMagazine())SHOP.view='grid';applyCategoryWorld();renderHome();const list=currentResults(),n=list.length,shown=SHOP.page*pageSize();$('result-count').textContent=SHOP.q?tpl(ui('results_search_template'),{query:SHOP.q,count:n}):tpl(ui('results_count_template'),{count:n});$('grid').className='grid'+(SHOP.view==='list'?' list':'');$('view-grid').setAttribute('aria-pressed',SHOP.view==='grid');$('view-list').setAttribute('aria-pressed',SHOP.view==='list');if(!n){$('grid').innerHTML='';$('empty').hidden=false;$('empty').innerHTML=`<h3>${esc(ui('empty_title'))}</h3><p>${esc(ui('empty_body'))}</p>`;$('load-more').hidden=true}else{
+function gridKey(){return [SHOP.q,SHOP.cat,SHOP.hot,SHOP.discMin,SHOP.price,SHOP.offer,SHOP.sort,SHOP.view,MISSION?JSON.stringify(MISSION.type)+MISSION.value:''].join('|')}
+function renderResults(){SHOP.page=Math.max(1,SHOP.page);applyCategoryWorld();renderHome();const list=currentResults(),n=list.length,shown=SHOP.page*pageSize();$('result-count').textContent=SHOP.q?tpl(ui('results_search_template'),{query:SHOP.q,count:n}):tpl(ui('results_count_template'),{count:n});$('grid').className='grid'+(SHOP.view==='list'?' list':'');$('view-grid').setAttribute('aria-pressed',SHOP.view==='grid');$('view-list').setAttribute('aria-pressed',SHOP.view==='list');if(!n){$('grid').innerHTML='';$('empty').hidden=false;$('empty').innerHTML=`<h3>${esc(ui('empty_title'))}</h3><p>${esc(ui('empty_body'))}</p>`;$('load-more').hidden=true}else{
     $('empty').hidden=true;
     const grid=$('grid');
     const key=gridKey();
@@ -4550,12 +4605,10 @@ window.oceanProductActionAudit=oceanProductActionAudit;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')releaseUnusedBlobs()});
 /* A breakpoint change alters the column count, so module boundaries are
    recomputed — cheaply, and only when the count actually changes. */
-let LAST_COLS=0,COLS_TIMER=0,LAST_MOBILE=isMobileMagazine();
+let LAST_COLS=0,COLS_TIMER=0;
 window.addEventListener('resize',()=>{
   clearTimeout(COLS_TIMER);
   COLS_TIMER=setTimeout(()=>{
-    const mobileNow=isMobileMagazine();
-    if(mobileNow!==LAST_MOBILE){LAST_MOBILE=mobileNow;GRID_STATE=null;HOME_RENDER_KEY='';refresh(false);return}
     const c=gridColumns();
     if(c===LAST_COLS||!GRID_STATE||!GRID_STATE.comp)return;
     LAST_COLS=c;
@@ -4777,9 +4830,7 @@ function initBrandCarousel(){
   });
 }
 let HOME_RENDER_KEY='';
-
-function renderMobileHomeMagazine(){const deals=INDEX.filter(e=>!excluded(e)&&e.price>0&&productImage(e.p)).sort((a,b)=>b.disc-a.disc||b.save-a.save).slice(0,5);deals.forEach(e=>HOME_USED.add(e.id));const rail=deals.length>=3?`<section class="m-rail-section" data-kind="feature"><div class="m-rail-head"><div><span>${esc(ui('deals_eyebrow','مختارة لك'))}</span><h3>${esc(setting('deal_theatre_title_ar','أقوى عروض الشهر'))}</h3></div></div><div class="m-rail">${deals.map(shelfCard).join('')}</div></section>`:'';return renderHero()+renderBrandCarousel()+rail+`<div class="all-heading"><span class="eyebrow">${esc(ui('all_grid_eyebrow'))}</span><h2>${esc(setting('full_grid_title_ar',''))}</h2></div>`}
-function renderHome(){const host=$('home');if(!boolSetting('shop_home_enabled')){if(HOME_RENDER_KEY!=='disabled'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='disabled'}return}if(pristine()){const mobile=isMobileMagazine(),key=mobile?'home-mobile':'home';if(HOME_RENDER_KEY===key&&!host.hidden&&host.innerHTML)return;host.hidden=false;host.innerHTML=mobile?renderMobileHomeMagazine():renderHero()+renderBrandCarousel()+renderDeals()+liveCampaigns('home_mid').map(campaignStrip).join('')+renderShowcases()+renderSaving()+liveCampaigns('home_bottom').map(campaignStrip).join('')+`<div class="all-heading"><span class="eyebrow">${esc(ui('all_grid_eyebrow'))}</span><h2>${esc(setting('full_grid_title_ar',''))}</h2></div>`;HOME_RENDER_KEY=key;initBrandCarousel();initLazyImages(host);return}if(SHOP.cat&&boolSetting('active_category_banner_enabled')&&!SHOP.q&&!SHOP.hot&&!SHOP.discMin&&!SHOP.price&&!SHOP.offer&&!MISSION){const c=CATEGORY_MAP.get(SHOP.cat);if(c){const key='cat:'+c.category_key;if(HOME_RENDER_KEY!==key||host.hidden||!host.innerHTML){host.hidden=false;host.innerHTML=showBanner(c,false);HOME_RENDER_KEY=key;initLazyImages(host)}return}}if(HOME_RENDER_KEY!=='hidden'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='hidden'}}
+function renderHome(){const host=$('home');if(!boolSetting('shop_home_enabled')){if(HOME_RENDER_KEY!=='disabled'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='disabled'}return}if(pristine()){const key='home';if(HOME_RENDER_KEY===key&&!host.hidden&&host.innerHTML)return;host.hidden=false;host.innerHTML=renderHero()+renderBrandCarousel()+renderDeals()+liveCampaigns('home_mid').map(campaignStrip).join('')+renderShowcases()+renderSaving()+liveCampaigns('home_bottom').map(campaignStrip).join('')+`<div class="all-heading"><span class="eyebrow">${esc(ui('all_grid_eyebrow'))}</span><h2>${esc(setting('full_grid_title_ar',''))}</h2></div>`;HOME_RENDER_KEY=key;initBrandCarousel();initLazyImages(host);return}if(SHOP.cat&&boolSetting('active_category_banner_enabled')&&!SHOP.q&&!SHOP.hot&&!SHOP.discMin&&!SHOP.price&&!SHOP.offer&&!MISSION){const c=CATEGORY_MAP.get(SHOP.cat);if(c){const key='cat:'+c.category_key;if(HOME_RENDER_KEY!==key||host.hidden||!host.innerHTML){host.hidden=false;host.innerHTML=showBanner(c,false);HOME_RENDER_KEY=key;initLazyImages(host)}return}}if(HOME_RENDER_KEY!=='hidden'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='hidden'}}
 function target(type,value,label=''){type=String(type||'all').trim().toLowerCase();value=String(value||'').trim();if(type==='product'){openQuickView(value);return}const keepCat=SHOP.cat;SHOP.q='';SHOP.cat='';SHOP.hot=false;SHOP.discMin=0;SHOP.price='';SHOP.offer='';SHOP.sort=options('sort')[0]?.engine_key||'';MISSION=null;$('search').value='';$('search-clear').hidden=true;if(type==='category')SHOP.cat=value.toLowerCase();else if(type==='brand')MISSION={type:'brand',value:value.toLowerCase(),label:label||BRAND_MAP.get(value.toLowerCase())?.brand_name_ar||''};else if(type==='discount')SHOP.discMin=num(value);else if(type==='cat_discount'){SHOP.cat=keepCat;SHOP.discMin=num(value)}else if(type==='cat_offer'){SHOP.cat=keepCat;SHOP.offer=value}else if(type==='saving')SHOP.sort='saving';else if(type==='price_lte')MISSION={type:'price_lte',value:num(value),label:label||money(num(value))};else if(type==='item_list')MISSION={type:'item_list',items:value.toLowerCase().split(/[,;|\s]+/).filter(Boolean),label:label||ui('intro_campaign_default')};else if(type==='linked_items'){const rows=linkedCampaignItems(value),items=rows.map(r=>r.item_code);if(!items.length){showToast(ui('linked_items_empty'));return}MISSION={type:'linked_items',campaign_id:value.toLowerCase(),items,label:label||ui('intro_campaign_default'),order:new Map(rows.map(r=>[r.item_code,r.sort_order]))}}$('sort').value=SHOP.sort;refresh();$('result-count').scrollIntoView({behavior:'smooth',block:'start'})}
 
 function renderFilter(){const d=SHOP.discMin,p=SHOP.price,o=SHOP.offer;const discounts=options('discount'),prices=options('price'),offers=options('offer');$('filter-body').innerHTML=`<div class="filter-group"><h3>${esc(ui('filter_discount_heading'))}</h3><div class="filter-options">${discounts.map(x=>{const v=num(x.numeric_value);return `<button class="filter-option ${d===v?'active':''}" data-filter="disc" data-value="${v}">${esc(x.label_ar)}</button>`}).join('')}</div></div><div class="filter-group"><h3>${esc(ui('filter_price_heading'))}</h3><div class="filter-options">${prices.map(x=>`<button class="filter-option ${p===x.option_key?'active':''}" data-filter="price" data-value="${esc(x.option_key)}">${esc(x.label_ar)}</button>`).join('')}</div></div><div class="filter-group"><h3>${esc(ui('filter_offer_heading'))}</h3><div class="filter-options">${offers.map(x=>`<button class="filter-option ${o===x.engine_key?'active':''}" data-filter="offer" data-value="${esc(x.engine_key)}">${esc(x.label_ar)}</button>`).join('')}</div></div>`}
@@ -5125,7 +5176,7 @@ $('filter-clear').onclick=()=>{SHOP.discMin=0;SHOP.price='';SHOP.offer='';render
 $('filter-body').onclick=e=>{const b=e.target.closest('[data-filter]');if(!b)return;const k=b.dataset.filter,v=b.dataset.value;if(k==='disc')SHOP.discMin=SHOP.discMin===+v?0:+v;if(k==='price')SHOP.price=SHOP.price===v?'':v;if(k==='offer')SHOP.offer=SHOP.offer===v?'':v;renderFilter()};
 $('more-open').onclick=()=>{$('more-menu').hidden=!$('more-menu').hidden};$('refresh').onclick=()=>{$('more-menu').hidden=true;loadAll(true)};
 document.addEventListener('click',e=>{if(!e.target.closest('.header-menu'))$('more-menu').hidden=true;if(!e.target.closest('.search-wrap'))$('suggest').hidden=true});
-$('floating-cart').onclick=openCart;$('order-btn').onclick=handleOrder;const cartSummaryEl=document.querySelector('.cart-summary');if(cartSummaryEl)cartSummaryEl.onclick=()=>{if(isMobileMagazine())openCart()};$('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});window.addEventListener('scroll',()=>{$('back-top').classList.toggle('show',window.scrollY>700)},{passive:true});
+$('floating-cart').onclick=openCart;$('order-btn').onclick=handleOrder;$('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});window.addEventListener('scroll',()=>{$('back-top').classList.toggle('show',window.scrollY>700)},{passive:true});
 document.addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add){cartAdd(add.dataset.add);return}const rem=e.target.closest('[data-remove]');if(rem){cartRemove(rem.dataset.remove);return}const del=e.target.closest('[data-cart-delete]');if(del){cartDelete(del.dataset.cartDelete);return}if(e.target.closest('[data-close-cart]')){closeSheetRoot($('cart-root'));return}if(e.target.closest('[data-close-qv]')){closeSheetRoot($('qv-root'));return}const prod=e.target.closest('[data-product]');if(prod){openQuickView(prod.dataset.product);return}const cat=e.target.closest('[data-category]');if(cat){SHOP.q='';SHOP.cat=cat.dataset.category;SHOP.hot=false;MISSION=null;refresh();return}const t=e.target.closest('[data-target]');if(t){target(t.dataset.target,t.dataset.value,t.dataset.label);return}const cf=e.target.closest('[data-clear-filter]');if(cf){const k=cf.dataset.clearFilter;if(k==='q'){SHOP.q='';$('search').value=''}if(k==='cat')SHOP.cat='';if(k==='hot')SHOP.hot=false;if(k==='disc')SHOP.discMin=0;if(k==='price')SHOP.price='';if(k==='offer')SHOP.offer='';if(k==='mission')MISSION=null;refresh();return}if(e.target.closest('[data-clear-all]')){resetFilters();return}if(e.target.closest('[data-cart-order]')){closeSheetRoot($('cart-root'));handleOrder();return}const sp=e.target.closest('[data-suggest-product]');if(sp){$('suggest').hidden=true;openQuickView(sp.dataset.suggestProduct);return}if(e.target.closest('[data-close-modal]')){$('modal-root').innerHTML='';return}if(e.target.closest('[data-retry-order]')){$('modal-root').innerHTML='';handleOrder();return}if(e.target.closest('[data-support]')){const ctx=$('modal-root')._ctx;openWa(ctx?.cs,cartMessage(ctx?.loc,null));$('modal-root').innerHTML='';return}const pk=e.target.closest('[data-pickup]');if(pk){const ctx=$('modal-root')._ctx,b=ctx?.ranked?.find(x=>String(x.id)===pk.dataset.pickup);if(b)openWa(b.whatsapp||ctx.cs,cartMessage(ctx.loc,b,true));$('modal-root').innerHTML='';return}});
 
 loadCart();syncCartUI();$('grid').innerHTML=Array.from({length:8},()=>'<div class="skeleton"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line s"></div></div>').join('');loadAll();
