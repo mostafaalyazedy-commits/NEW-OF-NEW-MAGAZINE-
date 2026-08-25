@@ -2675,11 +2675,16 @@ body.cat-world::before{opacity:.40}
     padding:10px!important;
   }
   .hero-deal .deal-img{
-    min-height:0!important;aspect-ratio:1/.78;
+    aspect-ratio:auto!important;
+    min-height:220px!important;
+    height:clamp(220px,55vw,300px)!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
     border-radius:14px;
   }
-  .deal-img img,.hero-deal .deal-img img{
-    max-width:88%!important;max-height:88%!important;object-fit:contain!important;
+  .hero-deal .deal-img img,.deal-img img{
+    width:100%!important;height:100%!important;
+    max-width:88%!important;max-height:88%!important;
+    object-fit:contain!important;
   }
   .hero-deal strong{font-size:15.5px!important;line-height:1.45;margin-top:6px}
   .hero-deal .price-inline{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
@@ -2695,7 +2700,29 @@ body.cat-world::before{opacity:.40}
     gap:9px!important;overflow:visible!important;
   }
   .deal-side .deal{flex:none!important;min-width:0;padding:8px!important}
-  .deal-side .deal-img{min-height:0!important;aspect-ratio:1/.92}
+  .deal-side .deal-img{
+    aspect-ratio:auto!important;
+    min-height:130px!important;
+    height:clamp(130px,33vw,170px)!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+  }
+  .deal-side .deal-img img{
+    width:100%!important;height:100%!important;
+    max-width:86%!important;max-height:86%!important;object-fit:contain!important;
+  }
+  /* the featured hero stage gets the same explicit guarantee */
+  .feat-lead-img{
+    aspect-ratio:auto!important;
+    min-height:220px!important;
+    height:clamp(220px,55vw,300px)!important;
+  }
+  .feat-lead-img img{
+    width:100%!important;height:100%!important;
+    max-width:88%!important;max-height:88%!important;object-fit:contain!important;
+  }
+  /* no product stage may collapse again: a zero-height stage is invisible AND
+     silently stalls the lazy loader */
+  .shelf-img,.mini-feature-img,.rail-offer-img{min-height:110px}
   .deal-side .deal strong{font-size:11.5px!important;line-height:1.45;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .deal-side .deal-price,.deal-side .price-inline .deal-price{font-size:16px!important}
@@ -2805,6 +2832,127 @@ body.cat-world::before{opacity:.40}
   .hero-deal .deal-price,.hero-deal .price-inline .deal-price{font-size:21px!important}
   .brand-marquee[data-brand-bucket="mid"] .brand-item,
   .brand-marquee[data-brand-bucket="many"] .brand-item{width:calc((100% - 2*7px)/3)!important}
+}
+
+
+/* ============================================================
+   V37 — ONE ACTION SYSTEM, EVERY TILE
+   .product-tile is now the layout item everywhere a product is drawn; the
+   white surface lives inside it and the action sits below it.
+
+   Because the tile took over as the flex/grid child, every rule that SIZED a
+   surface has to size the tile instead. Grid containers (.sl-side, .deal-side,
+   .feature-side, .feature-composer, .feature-stage, .offer-rail at desktop)
+   need no transfer — their children are items by definition. Only the FLEX
+   containers below did.
+   ============================================================ */
+
+.product-tile{display:flex;flex-direction:column;min-width:0;align-self:stretch}
+.product-tile>.card,
+.product-tile>.shelf-card,
+.product-tile>.deal,
+.product-tile>.rail-offer,
+.product-tile>.mini-feature,
+.product-tile>.feature-lead,
+.product-tile>.feat-lead,
+.product-tile>.sl-lead{flex:1 1 auto;width:100%;max-width:none;margin:0}
+/* the surfaces were <button>; as divs they need the button affordances back */
+[data-product][role="button"]{cursor:pointer;text-align:inherit;font:inherit;color:inherit}
+[data-product][role="button"]:focus-visible{outline:3px solid var(--cat-accent);outline-offset:3px}
+
+/* ---------- SIZING TRANSFER: flex containers ---------- */
+.grid>.product-tile{
+  flex:0 1 calc((100% - (var(--cols) - 1)*var(--gcap))/var(--cols) - .02px);min-width:0;
+}
+.shelf>.product-tile{flex:0 0 176px}
+.mod-row>.product-tile{flex:0 1 calc((100% - 5*12px)/6 - .02px);min-width:150px;max-width:260px}
+.mod-row[data-count="1"]>.product-tile{flex:0 1 min(320px,100%)}
+.mod-row[data-count="2"]>.product-tile{flex:0 1 calc((100% - 12px)/2 - .02px);max-width:340px}
+.mod-row[data-count="3"]>.product-tile{flex:0 1 calc((100% - 2*12px)/3 - .02px);max-width:320px}
+.mod-row[data-count="4"]>.product-tile{flex:0 1 calc((100% - 3*12px)/4 - .02px);max-width:300px}
+.mod-row[data-count="5"]>.product-tile{flex:0 1 calc((100% - 4*12px)/5 - .02px)}
+.mod-row[data-count="6"]>.product-tile{flex:0 1 calc((100% - 5*12px)/6 - .02px)}
+.feat-side>.product-tile{flex:none;width:auto;max-width:none}
+.mod-saving .mod-row>.product-tile:first-child,
+.hx-save .mod-row>.product-tile:first-child{max-width:none}
+@media(min-width:820px){
+  .mod-saving .mod-row>.product-tile:first-child,
+  .hx-save .mod-row>.product-tile:first-child{flex:0 1 calc((100% - 3*12px)/4*2 + 12px)}
+  .mod-discount .mod-row>.product-tile:nth-child(even){margin-top:26px}
+  .mod-combo .mod-row>.product-tile{flex:0 1 calc((100% - 2*12px)/3 - .02px);max-width:none}
+}
+/* the old surface-level sizing must stop competing now that it is nested */
+.mod-row>.shelf-card,.feat-side>.shelf-card,.shelf>.shelf-card{flex:1 1 auto;max-width:none;min-width:0}
+
+/* ---------- THE ACTION (one class, one look, every tile) ---------- */
+.product-action{margin-top:8px;display:block;flex:0 0 auto}
+.product-action .add,.product-action .qty,.product-action .qty button{cursor:pointer}
+.product-action .add{
+  display:flex!important;align-items:center;justify-content:center;
+  width:100%!important;min-height:42px;
+  margin:0!important;padding:0 12px!important;
+  border:0!important;border-radius:12px!important;
+  font-weight:900;font-size:13.5px;letter-spacing:-.01em;
+  background:linear-gradient(135deg,var(--navy),var(--cat-deep))!important;
+  color:#fff!important;
+  box-shadow:0 6px 16px -6px rgba(10,42,77,.45),inset 0 1px 0 rgba(255,255,255,.16)!important;
+  transition:filter .2s ease,transform .12s ease,box-shadow .2s ease;
+}
+@media(hover:hover) and (min-width:1024px){
+  .product-action .add:hover{filter:brightness(1.1);box-shadow:0 10px 22px -8px rgba(10,42,77,.55)!important}
+}
+.product-action .add:active{transform:translateY(1px)}
+.product-action .add:focus-visible{outline:3px solid var(--cat-accent);outline-offset:2px}
+.product-action .qty{
+  width:100%!important;min-width:0!important;margin:0!important;min-height:42px;
+  grid-template-columns:52px minmax(0,1fr) 52px!important;
+  border-radius:12px!important;border:1px solid rgba(14,61,110,.18)!important;
+  background:#fff;overflow:hidden;
+}
+.product-action .qty button{font-size:19px;background:#F4FAF6!important;color:var(--green)!important;border:0}
+.product-action .qty span{font-size:14px;font-weight:900}
+
+/* cart state lives on the tile — the controls are outside the white surface */
+.product-tile[data-incart="0"] .qty{display:none}
+.product-tile[data-incart="1"] .add{display:none}
+
+/* on the dark peaks the CTA must stay legible against a navy field */
+.mod-spotlight .product-action .add,.theatre .product-action .add{
+  background:linear-gradient(135deg,#fff,#EAF1F8)!important;
+  color:var(--navy2)!important;
+  box-shadow:0 8px 20px -8px rgba(0,0,0,.55)!important;
+}
+.card .card-secondary{display:none!important}
+.card{cursor:pointer}
+
+@media(max-width:700px){
+  .product-action{margin-top:6px}
+  .product-action .add,.product-action .qty{min-height:44px!important}
+  .product-action .add{font-size:13px}
+  .product-action .qty{grid-template-columns:46px minmax(0,1fr) 46px!important}
+  .shelf>.product-tile{flex:0 0 145px}
+  .mod-row>.product-tile,
+  .mod-row[data-count="3"]>.product-tile,
+  .mod-row[data-count="4"]>.product-tile,
+  .mod-row[data-count="5"]>.product-tile,
+  .mod-row[data-count="6"]>.product-tile{flex:0 1 calc((100% - 9px)/2 - .02px);min-width:0;max-width:none}
+  .mod-row[data-count="1"]>.product-tile{flex:0 1 100%}
+  .feat-side>.product-tile{flex:0 0 145px}
+  .offer-rail>.product-tile{flex:0 0 270px}
+}
+@media(max-width:1023px){
+  .feat-side>.product-tile{flex:0 0 158px}
+  .offer-rail>.product-tile{flex:0 0 290px}
+}
+@media(max-width:430px){
+  .feat-side>.product-tile{flex:0 0 136px}
+}
+@media(max-width:390px){
+  .product-action .add{font-size:12.5px;padding:0 8px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .product-action .add{transition:none!important}
+  .product-action .add:active{transform:none}
 }
 
 </style>
@@ -3054,6 +3202,21 @@ function initLazyImages(root=document){
       LAZY_OBSERVER.observe(img);
     }
   });
+  /* IntersectionObserver never reports a zero-area box, so a collapsed stage
+     would keep its placeholder forever. Anything still deferred and measuring
+     zero while genuinely laid out is loaded directly. Images inside a
+     display:none branch have no offsetParent and are correctly left alone. */
+  setTimeout(()=>{
+    lazies.forEach(img=>{
+      if(!img.isConnected||img.dataset.lazyLoaded==='1')return;
+      if(img.offsetParent===null)return;
+      const r=img.getBoundingClientRect();
+      if(r.width<4||r.height<4){
+        activateLazyImage(img);
+        if(LAZY_OBSERVER)LAZY_OBSERVER.unobserve(img);
+      }
+    });
+  },1200);
 }
 /* Banner art frames drop their placeholder ratio the moment the real artwork
    decodes, so the banner ends up exactly as tall as the artwork itself. */
@@ -3626,14 +3789,49 @@ function featureSelection(list,count=10){
     .slice(0,count)
     .map(x=>x.e);
 }
+/* ============================================================
+   V37 — ONE PRODUCT ACTION FOR EVERY TILE
+   There is not one product card in this app, there are eight renderers. The
+   previous pass only updated card(), which is why several variants shipped
+   with no CTA.
+
+   Two shared primitives now serve all of them:
+     productAction(e)  — the CTA / stepper pair, driven by live CART state
+     productTile(...)  — wraps any product surface + its action
+
+   Every surface had to stop being a <button>: an action button cannot legally
+   nest inside one. They are now div[role=button][tabindex=0] carrying the same
+   data-product, so click delegation and keyboard access both still work.
+   ============================================================ */
+function productAction(e){
+  const q=CART.get(e.id)?.qty||0;
+  return `<div class="product-action">`
+    +`<button class="add" type="button" data-add="${esc(e.id)}">${esc(ui('add_to_cart_label','أضف إلى السلة'))}</button>`
+    +`<div class="qty">`
+      +`<button type="button" data-add="${esc(e.id)}" aria-label="${esc(ui('qty_increase','زيادة'))}">+</button>`
+      +`<span>${q}</span>`
+      +`<button type="button" data-remove="${esc(e.id)}" aria-label="${esc(ui('qty_decrease','إنقاص'))}">−</button>`
+    +`</div></div>`;
+}
+/* The tile is the layout item; the surface inside it keeps the white card. */
+function productTile(e,surfaceHtml,cls){
+  const q=CART.get(e.id)?.qty||0;
+  return `<div class="product-tile${cls?' '+cls:''}" data-id="${esc(e.id)}" data-incart="${q?1:0}">`
+    +surfaceHtml+productAction(e)+`</div>`;
+}
+/* Shared attributes for a clickable, keyboard-reachable product surface. */
+function surfaceAttrs(e){
+  const nm=e.p.product_name_ar||e.p.product_name_en||'';
+  return `data-product="${esc(e.id)}" role="button" tabindex="0" aria-label="${esc(tpl(ui('view_details_template','عرض تفاصيل {product}'),{product:nm}))}"`;
+}
 function railOfferCard(e){
-  return `<button class="rail-offer" data-product="${esc(e.id)}"><span class="rail-offer-img">${badge(e)}${imageBlock(e,false,'w340')}</span><span class="rail-offer-copy"><strong>${esc(e.p.product_name_ar||e.p.product_name_en)}</strong><span class="rail-sub">${esc(e.p.subtitle||e.p.product_name_en||'')}</span>${priceInline(e,'rail-price')}${saveChip(e)}</span></button>`;
+  return productTile(e,`<div class="rail-offer" ${surfaceAttrs(e)}><span class="rail-offer-img">${badge(e)}${imageBlock(e,false,'w340')}</span><span class="rail-offer-copy"><strong>${esc(e.p.product_name_ar||e.p.product_name_en)}</strong><span class="rail-sub">${esc(e.p.subtitle||e.p.product_name_en||'')}</span>${priceInline(e,'rail-price')}${saveChip(e)}</span></div>`,'rail-tile');
 }
 function miniFeatureCard(e){
-  return `<button class="mini-feature" data-product="${esc(e.id)}"><span class="mini-feature-img">${badge(e)}${imageBlock(e,false,'w340')}</span><span class="mini-feature-copy"><strong>${esc(e.p.product_name_ar||e.p.product_name_en)}</strong><span>${esc(e.p.subtitle||e.p.product_name_en||'')}</span>${priceInline(e,'mini-feature-price')}${saveChip(e)}</span></button>`;
+  return productTile(e,`<div class="mini-feature" ${surfaceAttrs(e)}><span class="mini-feature-img">${badge(e)}${imageBlock(e,false,'w340')}</span><span class="mini-feature-copy"><strong>${esc(e.p.product_name_ar||e.p.product_name_en)}</strong><span>${esc(e.p.subtitle||e.p.product_name_en||'')}</span>${priceInline(e,'mini-feature-price')}${saveChip(e)}</span></div>`,'mini-tile');
 }
 function featureLeadCard(e){
-  return `<button class="feature-lead" data-product="${esc(e.id)}"><span class="feature-lead-art">${badge(e)}${imageBlock(e,false,'w720')}</span><span class="feature-lead-copy"><span class="feature-tag">أبرز عرض</span><h3>${esc(e.p.product_name_ar||e.p.product_name_en)}</h3><p>${esc(e.p.subtitle||e.p.product_name_en||'')}</p><span class="feature-prices">${priceInline(e,'price')}</span>${saveChip(e)}</span></button>`;
+  return productTile(e,`<div class="feature-lead" ${surfaceAttrs(e)}><span class="feature-lead-art">${badge(e)}${imageBlock(e,false,'w720')}</span><span class="feature-lead-copy"><span class="feature-tag">أبرز عرض</span><h3>${esc(e.p.product_name_ar||e.p.product_name_en)}</h3><p>${esc(e.p.subtitle||e.p.product_name_en||'')}</p><span class="feature-prices">${priceInline(e,'price')}</span>${saveChip(e)}</span></div>`,'lead-tile');
 }
 function renderCategoryStory(c){
   const list=currentResults(),count=list.length,picks=featureSelection(list,10),lead=picks[0]||null,side=picks.slice(1,4),rail=picks.slice(4,10);
@@ -3650,20 +3848,20 @@ function renderCategoryStory(c){
 }
 function card(e,idx,chapterTone=0){
   const q=CART.get(e.id)?.qty||0;
-  return `<article class="card" data-id="${esc(e.id)}" data-incart="${q?1:0}" data-offer="${esc(e.offer)}" data-tier="${esc(offerTier(e))}" data-chapter-tone="${esc(String(chapterTone%3))}">
-    <div class="card-img">${badge(e)}${imageBlock(e,!pristine()&&idx<8,'w440')}</div>
+  const nm=e.p.product_name_ar||e.p.product_name_en||'';
+  const detailsLabel=tpl(ui('view_details_template','عرض تفاصيل {product}'),{product:nm});
+  return `<div class="product-tile grid-tile" data-id="${esc(e.id)}" data-incart="${q?1:0}">
+    <article class="card" data-id="${esc(e.id)}" data-product="${esc(e.id)}" data-incart="${q?1:0}" data-offer="${esc(e.offer)}" data-tier="${esc(offerTier(e))}" data-chapter-tone="${esc(String(chapterTone%3))}">
+    <div class="card-img" role="button" tabindex="0" aria-label="${esc(detailsLabel)}">${badge(e)}${imageBlock(e,!pristine()&&idx<8,'w440')}</div>
     <div class="card-body">
       <h3 class="card-name">${esc(e.p.product_name_ar||e.p.product_name_en)}</h3>
       <div class="card-sub">${esc(e.p.subtitle||e.p.product_name_en||'')}</div>
       ${priceStack(e)}
       ${saveChip(e,'save')}
-      <div class="card-actions">
-        <button class="card-secondary" data-product="${esc(e.id)}">عرض</button>
-        <button class="add" data-add="${esc(e.id)}">أضف</button>
-        <div class="qty"><button data-add="${esc(e.id)}">+</button><span>${q}</span><button data-remove="${esc(e.id)}">−</button></div>
-      </div>
     </div>
-  </article>`;
+    </article>
+    ${productAction(e)}
+  </div>`;
 }
 /* ============================================================
    MAGAZINE COMPOSER
@@ -3748,7 +3946,7 @@ function featureBlock(pool,used){
   return {picks,html:`<section class="mod mod-feature" data-count="${picks.length}">
     ${moduleHead(ui('deals_eyebrow'),chapterTitle('feature'),'')}
     <div class="feature-stage" data-count="${picks.length}">
-      <button class="feat-lead" type="button" data-product="${esc(lead.id)}">
+      ${productTile(lead,`<div class="feat-lead" ${surfaceAttrs(lead)}>
         <span class="feat-lead-img">${badge(lead)}${imageBlock(lead,false,'w720')}</span>
         <span class="feat-lead-copy">
           <strong>${esc(lead.p.product_name_ar||lead.p.product_name_en||'')}</strong>
@@ -3756,7 +3954,7 @@ function featureBlock(pool,used){
           ${priceInline(lead,'price')}
           ${saveChip(lead)}
         </span>
-      </button>
+      </div>`,'feat-lead-tile')}
       <div class="feat-side" data-count="${side.length}">${side.map(shelfCard).join('')}</div>
     </div>
   </section>`};
@@ -3916,7 +4114,7 @@ function spotlightBlock(pool,used){
       <div><span class="eyebrow">${esc(ui('spotlight_eyebrow','عرض تحت الضوء'))}</span><h3>${esc(chapterTitle('spotlight'))}</h3></div>
     </div>
     <div class="sl-stage">
-      <button class="sl-lead" type="button" data-product="${esc(lead.id)}">
+      ${productTile(lead,`<div class="sl-lead" ${surfaceAttrs(lead)}>
         <span class="sl-lead-img">${badge(lead)}${imageBlock(lead,false,'w720')}</span>
         <span class="sl-lead-copy">
           <strong>${esc(lead.p.product_name_ar||lead.p.product_name_en||'')}</strong>
@@ -3924,7 +4122,7 @@ function spotlightBlock(pool,used){
           ${priceInline(lead,'price')}
           ${saveChip(lead)}
         </span>
-      </button>
+      </div>`,'sl-lead-tile')}
       <div class="sl-side" data-count="${side.length}">${side.map(shelfCard).join('')}</div>
     </div>
   </section>`};
@@ -4013,7 +4211,7 @@ function gridColumns(){
   /* 1. Measure what is actually on screen — the only source that survives zoom,
         a constrained container, or a stylesheet that did not apply. */
   if(g&&g.clientWidth>0){
-    const card=g.querySelector('.card');
+    const card=g.querySelector('.product-tile')||g.querySelector('.card');
     if(card&&card.offsetWidth>0){
       const cs=getComputedStyle(g);
       const gap=parseFloat(cs.columnGap||cs.gap||'0')||0;
@@ -4150,6 +4348,38 @@ function oceanPriceAudit(){
   return rows;
 }
 window.oceanPriceAudit=oceanPriceAudit;
+/* Every rendered product surface must sit in a tile that carries exactly one
+   action. Reports any surface that slipped through a renderer without one. */
+function oceanProductActionAudit(){
+  const SURFACES='.card,.shelf-card,.deal,.rail-offer,.mini-feature,.feature-lead,.feat-lead,.sl-lead';
+  const surfaces=[...document.querySelectorAll(SURFACES)];
+  const tiles=[...document.querySelectorAll('.product-tile')];
+  const missing=[],dupes=[],orphans=[];
+  tiles.forEach(t=>{
+    const acts=t.querySelectorAll(':scope > .product-action').length;
+    const id=t.dataset.id||'(no id)';
+    if(acts===0)missing.push(id);
+    else if(acts>1)dupes.push(id);
+  });
+  surfaces.forEach(sf=>{
+    const t=sf.closest('.product-tile');
+    if(!t)orphans.push(sf.className+' :: '+(sf.dataset.product||'(no id)'));
+  });
+  const out={
+    total_product_tiles:tiles.length,
+    tiles_with_action:tiles.length-missing.length,
+    tiles_missing_action:missing.length,
+    duplicate_actions:dupes.length,
+    surfaces_outside_any_tile:orphans.length,
+    surfaces_seen:surfaces.length
+  };
+  console.info('Ocean product-action audit',out);
+  if(missing.length)console.warn('tiles with no action:',missing.slice(0,20));
+  if(dupes.length)console.warn('tiles with more than one action:',dupes.slice(0,20));
+  if(orphans.length)console.warn('product surfaces outside a tile:',orphans.slice(0,20));
+  return out;
+}
+window.oceanProductActionAudit=oceanProductActionAudit;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')releaseUnusedBlobs()});
 /* A breakpoint change alters the column count, so module boundaries are
    recomputed — cheaply, and only when the count actually changes. */
@@ -4241,7 +4471,7 @@ function oceanLayoutAudit(){
       layout_matches_data:declared===ids.length,
       distinct_brands:new Set(brands).size,ids};
   });
-  const gridIds=[...grid.querySelectorAll(':scope > .card[data-id]')].map(c=>c.dataset.id);
+  const gridIds=[...grid.querySelectorAll(':scope > .product-tile[data-id]')].map(c=>c.dataset.id);
   const modIds=modules.flatMap(m=>m.ids);
   const dupInGrid=modIds.filter(id=>gridIds.includes(id));
   const dupAcross=modIds.filter((id,i)=>modIds.indexOf(id)!==i);
@@ -4287,10 +4517,10 @@ function oceanRhythmAudit(){
   const lastThirdStart=Math.floor(tiles*0.67);
   let seen=0,lastThirdBreak=false;
   [...grid.children].forEach(k=>{
-    if(k.classList.contains('card'))seen++;
+    if(k.classList.contains('product-tile'))seen++;
     else if(k.classList.contains('grid-break')&&seen>=lastThirdStart)lastThirdBreak=true;
   });
-  const gridIds=[...grid.querySelectorAll(':scope > .card[data-id]')].map(c=>c.dataset.id);
+  const gridIds=[...grid.querySelectorAll(':scope > .product-tile[data-id]')].map(c=>c.dataset.id);
   const modIds=[...grid.querySelectorAll('.grid-break [data-product]')].map(b=>b.dataset.product);
   const ids=gridIds.concat(modIds);
   const dupes=ids.filter((x,i)=>ids.indexOf(x)!==i);
@@ -4335,9 +4565,9 @@ function resetFilters(){SHOP.q='';SHOP.cat='';SHOP.hot=false;SHOP.discMin=0;SHOP
 
 function renderBrandCarousel(){if(!boolSetting('brand_carousel_enabled'))return'';const counts=new Map;INDEX.forEach(e=>{const k=String(e.p.brand_key||'').trim().toLowerCase();if(k)counts.set(k,(counts.get(k)||0)+1)});const limit=intSetting('brand_carousel_limit',1,100);const brands=BRANDS.filter(b=>truthy(b.active)&&truthy(b.carousel_active)&&counts.has(b.brand_key)).sort((a,b)=>num(a.carousel_order)-num(b.carousel_order)).slice(0,limit||BRANDS.length);if(!brands.length)return'';const autoplay=boolSetting('brand_carousel_autoplay'),loop=boolSetting('brand_carousel_loop'),pause=boolSetting('brand_carousel_pause_on_hover'),speed=Math.max(1,intSetting('brand_carousel_speed_seconds',1,600));const items=brands.map(b=>`<button class="brand-item" data-target="brand" data-value="${esc(b.brand_key)}" data-label="${esc(b.brand_name_ar||b.brand_name_en)}" style="${levelVars(colorLevels(b.accent_color||setting('theme_color',''),b.brand_key),'brand')}"><span class="brand-ring">${b.brand_logo_url?imgTag(b.brand_logo_url,b.brand_name_ar,false,'','w240'):`<span class="brand-fallback">${esc((b.brand_name_ar||b.brand_name_en||'').slice(0,1))}</span>`}</span><strong>${esc(b.brand_name_ar||b.brand_name_en)}</strong></button>`).join('');const bucket=brands.length<=5?'few':brands.length<=8?'mid':'many';
   return `<section class="hx-block hx-brands"><div class="hx-head"><div><span class="eyebrow">${esc(ui('brand_carousel_eyebrow'))}</span><h2>${esc(setting('brand_carousel_title_ar',''))}</h2></div></div><div class="brand-marquee brand-init ${pause?'pause':''} static" data-brand-count="${brands.length}" data-brand-bucket="${bucket}" data-autoplay="${autoplay?'1':'0'}" data-loop="${loop?'1':'0'}" style="--brand-speed:${speed}s"><div class="brand-track">${items}</div></div></section>`}
-function dealCard(e,hero=false){return `<button class="deal ${hero?'hero-deal':''}" data-product="${esc(e.id)}"><div class="deal-img">${badge(e)}${imageBlock(e,false,hero?'w720':'w440')}</div><div><strong>${esc(e.p.product_name_ar)}</strong>${priceInline(e,'deal-price')}${saveChip(e)}</div></button>`}
+function dealCard(e,hero=false){return productTile(e,`<div class="deal ${hero?'hero-deal':''}" ${surfaceAttrs(e)}><div class="deal-img">${badge(e)}${imageBlock(e,false,hero?'w720':'w440')}</div><div><strong>${esc(e.p.product_name_ar)}</strong>${priceInline(e,'deal-price')}${saveChip(e)}</div></div>`,hero?'deal-tile hero-tile':'deal-tile')}
 function renderDeals(){if(!boolSetting('deal_theatre_enabled'))return'';const min=intSetting('deal_theatre_min_discount',0,100),limit=intSetting('deal_theatre_limit',1,50);const d=INDEX.filter(e=>!excluded(e)&&e.disc>=min).sort((a,b)=>b.disc-a.disc||b.save-a.save).slice(0,limit||INDEX.length);if(d.length<3)return'';d.slice(0,5).forEach(e=>HOME_USED.add(e.id));return `<section class="hx-block theatre"><div class="hx-head"><div><span class="eyebrow">${esc(ui('deals_eyebrow'))}</span><h2>${esc(setting('deal_theatre_title_ar',''))}</h2></div><button class="hx-link" data-target="discount" data-value="${min}">${esc(ui('view_all'))}</button></div><div class="theatre-grid">${dealCard(d[0],true)}<div class="deal-side">${d.slice(1,5).map(e=>dealCard(e)).join('')}</div></div></section>`}
-function shelfCard(e){return `<button class="shelf-card" data-product="${esc(e.id)}"><span class="shelf-img">${badge(e)}${imageBlock(e,false,'w400')}</span><strong>${esc(e.p.product_name_ar)}</strong>${priceInline(e,'shelf-price')}${saveChip(e)}</button>`}
+function shelfCard(e){return productTile(e,`<div class="shelf-card" ${surfaceAttrs(e)}><span class="shelf-img">${badge(e)}${imageBlock(e,false,'w400')}</span><strong>${esc(e.p.product_name_ar)}</strong>${priceInline(e,'shelf-price')}${saveChip(e)}</div>`,'shelf-tile')}
 function showcaseProducts(c){let a=INDEX.filter(e=>!excluded(e)&&String(e.p.category||'').trim().toLowerCase()===c.category_key);const m=String(c.showcase_sort||'magazine');if(m==='priority')a.sort((x,y)=>(num(x.p.merch_priority)||99999)-(num(y.p.merch_priority)||99999)||x.i-y.i);else if(m==='discount')a.sort((x,y)=>y.disc-x.disc);else if(m==='saving')a.sort((x,y)=>y.save-x.save);else if(m==='priceAsc')a.sort((x,y)=>x.price-y.price);else if(m==='priceDesc')a.sort((x,y)=>y.price-x.price);const explicit=num(c.showcase_limit),fallback=intSetting('default_showcase_limit',1,100);return a.slice(0,explicit||fallback||a.length)}
 function showBanner(c,withShelf=true,beat=0){
   const desktop=String(c.showcase_banner_desktop||'').trim(),
@@ -4373,7 +4603,7 @@ function closeFilter(){$('filter-sheet').classList.remove('show');setTimeout(()=
 const CART=new Map;
 function saveCart(){try{localStorage.setItem(`ocean-cart-v7:${SHEET_ID}`,JSON.stringify([...CART]))}catch{}}
 function loadCart(){try{const a=JSON.parse(localStorage.getItem(`ocean-cart-v7:${SHEET_ID}`)||'[]');if(Array.isArray(a))a.forEach(([k,v])=>CART.set(k,v))}catch{}}
-function syncVisibleProductQty(id){const q=CART.get(id)?.qty||0;document.querySelectorAll('.card[data-id]').forEach(c=>{if(c.dataset.id!==id)return;c.dataset.incart=q?1:0;const s=c.querySelector('.qty span');if(s)s.textContent=q})}
+function syncVisibleProductQty(id){const q=CART.get(id)?.qty||0;document.querySelectorAll('.product-tile[data-id]').forEach(t=>{if(t.dataset.id!==id)return;t.dataset.incart=q?1:0;const c=t.querySelector('.card');if(c)c.dataset.incart=q?1:0;const s=t.querySelector('.qty span');if(s)s.textContent=q})}
 function cartAdd(id){const e=ID_MAP.get(id);if(!e)return;const item=CART.get(id)||{id,name_ar:e.p.product_name_ar,name_en:e.p.product_name_en,code:e.p.item_code,price:e.price,old_price:e.old,cat:e.p.category,qty:0};item.qty++;CART.set(id,item);saveCart();syncCartUI();syncVisibleProductQty(id);showToast(ui('added_to_cart'))}
 function cartRemove(id){if(!CART.has(id))return;const i=CART.get(id);i.qty--;if(i.qty<=0)CART.delete(id);saveCart();syncCartUI();syncVisibleProductQty(id)}
 function cartDelete(id){CART.delete(id);saveCart();syncCartUI();syncVisibleProductQty(id);if(!$('cart-root').innerHTML)return;openCart()}
@@ -4440,7 +4670,8 @@ loadCart();syncCartUI();$('grid').innerHTML=Array.from({length:8},()=>'<div clas
 // BANNER_KEYBOARD_ACCESS
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'&&e.key!==' ')return;
-  const el=e.target.closest('.hero[data-target],.campaign-strip[data-target],.showcase-banner[data-category],.showcase-banner[data-target]');
+  if(e.target.closest('button,a,input,select,textarea'))return;
+  const el=e.target.closest('.hero[data-target],.campaign-strip[data-target],.showcase-banner[data-category],.showcase-banner[data-target],[data-product][role="button"]');
   if(!el)return;
   e.preventDefault();
   el.click();
