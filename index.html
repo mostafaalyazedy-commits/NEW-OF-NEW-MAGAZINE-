@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="boot-shop" data-build="v40-google-sheet-nearest-branch">
+<html lang="ar" dir="rtl" class="boot-shop" data-build="v48-reliable-nearest-branch-order">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -3180,6 +3180,19 @@ body.cat-world::before{opacity:.40}
   .chapter-open .ch-title{font-size:clamp(27px,8vw,36px)!important;line-height:1.06!important}
 }
 
+
+/* ============================================================
+   V48 — ORDER ROUTING RELIABILITY
+   Progress can never remain indefinitely: JS hard timeouts own every async
+   leg. The modal is also intentionally calm while the routing promise runs.
+   ============================================================ */
+.modal-order-progress h3::before{
+  content:"";display:inline-block;width:14px;height:14px;margin-inline-end:8px;
+  border:2px solid currentColor;border-inline-start-color:transparent;border-radius:50%;
+  vertical-align:-2px;animation:oceanOrderSpin .7s linear infinite;
+}
+@keyframes oceanOrderSpin{to{transform:rotate(360deg)}}
+
 </style>
 </head>
 <body>
@@ -4855,7 +4868,13 @@ function openQuickView(id){
 }
 
 function waUrl(number,msg){const n=String(number||'').replace(/\D/g,'');return n?`https://wa.me/${n}?text=${encodeURIComponent(msg)}`:''}
-function openWa(n,msg){const u=waUrl(n,msg);if(u)window.open(u,'_blank','noopener')}
+function openWa(n,msg){
+  const u=waUrl(n,msg);if(!u)return false;
+  /* Mobile Safari/Chrome may block window.open() when it happens after async
+     geolocation/fetch work. Same-page navigation is not popup-gated and still
+     hands wa.me off to the WhatsApp app when installed. */
+  try{window.location.assign(u);return true}catch(err){console.warn('Ocean V48 WhatsApp navigation failed',err);return false}
+}
 let BRANCHES=null;
 function cartMessage(location,branch,pickup=false){const lines=[ui('order_message_header')+'\n'];let i=1;CART.forEach(v=>{lines.push(`${i}) ${v.name_ar}${v.code?` — ${v.code}`:''}\n   ${ui('order_qty_label')}: ${v.qty}\n   ${ui('order_price_label')}: ${money(v.price)}\n`);i++});lines.push(`${ui('order_total_label')}: ${money(cartTotals().sum)}\n`);if(location)lines.push(`${ui('order_location_label')}:\nhttps://www.google.com/maps?q=${location.lat},${location.lng}\n`);if(branch)lines.push(`${pickup?ui('order_pickup_branch_label'):ui('order_suggested_branch_label')}: ${branch.code?branch.code+' — ':''}${branch.name}`);const footer=ui('order_message_footer');if(footer)lines.push('\n'+footer);return lines.join('\n')}
 function showOrderModal(title,text,actions){$('modal-root').innerHTML=`<div class="modal-backdrop"><div class="modal"><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="modal-actions">${actions}</div></div></div>`}
@@ -4965,10 +4984,32 @@ function distanceKm(lat1,lon1,lat2,lon2){
 }
 const hav=distanceKm;
 
+
+function withHardTimeout(promise,ms,label='operation'){
+  let timer;
+  const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+' timeout')),ms)});
+  return Promise.race([promise,timeout]).finally(()=>clearTimeout(timer));
+}
+function getUserPositionReliable(){
+  if(!navigator.geolocation)return Promise.reject(Object.assign(new Error('Geolocation unavailable'),{code:2}));
+  return new Promise((resolve,reject)=>{
+    let done=false;
+    const finish=(fn,val)=>{if(done)return;done=true;clearTimeout(watchdog);fn(val)};
+    const watchdog=setTimeout(()=>finish(reject,Object.assign(new Error('Geolocation hard timeout'),{code:3})),14000);
+    navigator.geolocation.getCurrentPosition(
+      pos=>finish(resolve,{lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,timestamp:Date.now()}),
+      err=>finish(reject,err),
+      /* Balanced mode is much more reliable on iOS than forcing GPS/high accuracy. */
+      {enableHighAccuracy:false,timeout:10000,maximumAge:60000}
+    );
+  });
+}
+let ORDER_IN_PROGRESS=false;
+
 async function branches(force=false){
   if(!force&&BRANCHES&&Date.now()-BRANCHES_LOADED_AT<BRANCH_CACHE_MS)return BRANCHES;
   let response;
-  try{response=await fetchData('ocean-branches-v40',BRANCHES_API_URL,{force})}
+  try{response=await withHardTimeout(fetchData('ocean-branches-v40',BRANCHES_API_URL,{force}),10000,'Branch sheet request')}
   catch(err){console.warn('Ocean V40: branch Google Sheet request failed',err);BRANCHES=null;return[]}
   const data=Array.isArray(response?.data)?response.data:[];
   BRANCH_DIAG.rows=data.length;BRANCH_DIAG.rejected=[];BRANCH_DIAG.deliveryEnabled=0;
@@ -5081,28 +5122,42 @@ function showGeoErrorModal(err,cs){
 }
 
 async function handleOrder(){
+  if(ORDER_IN_PROGRESS){showToast(ui('locating_branch','جارٍ تحديد أقرب فرع…'));return}
   if(!CART.size){showToast(ui('order_empty_toast','السلة فارغة'));return}
+
   const cs=String(setting('customer_service_whatsapp','')).replace(/\D/g,'');
   if(!navigator.geolocation){showGeoErrorModal({code:2},cs);return}
-  showToast(ui('locating_branch','جارٍ تحديد أقرب فرع…'));
 
-  const bs=await branches();
-  if(!bs.length){
-    showOrderModal(
-      ui('branch_data_error_title','تعذر تحميل بيانات الفروع'),
-      ui('branch_data_error_body','لم نتمكن من قراءة شيت الفروع حاليًا. حاول مرة أخرى أو تواصل مع خدمة العملاء.'),
-      `<button class="wa" data-retry-order>${esc(ui('retry','إعادة المحاولة'))}</button>`+
-      `<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`+
-      `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
-    );
-    $('modal-root')._ctx={loc:null,ranked:[],cs};return;
-  }
+  ORDER_IN_PROGRESS=true;
+  showOrderModal(
+    ui('locating_branch_title','جاري تجهيز طلبك'),
+    ui('locating_branch','جارٍ تحديد أقرب فرع لك…'),
+    `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
+  );
 
-  navigator.geolocation.getCurrentPosition(pos=>{
-    const loc={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy};
+  try{
+    /* Branch data and location are independent. Start both at once so the
+       customer never waits for one before the other. */
+    const [bs,loc]=await Promise.all([
+      withHardTimeout(branches(),11000,'Branches loading'),
+      getUserPositionReliable()
+    ]);
+
+    if(!Array.isArray(bs)||!bs.length){
+      showOrderModal(
+        ui('branch_data_error_title','تعذر تحميل بيانات الفروع'),
+        ui('branch_data_error_body','لم نتمكن من قراءة شيت الفروع حاليًا. حاول مرة أخرى أو تواصل مع خدمة العملاء.'),
+        `<button class="wa" data-retry-order>${esc(ui('retry','إعادة المحاولة'))}</button>`+
+        `<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`+
+        `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
+      );
+      $('modal-root')._ctx={loc:null,ranked:[],cs};return;
+    }
+
     LAST_GEO=loc;
     const ranked=rankBranches(bs,loc);
     logBranchTable(ranked,loc);
+
     if(!ranked.length){
       showOrderModal(
         ui('branch_unavailable_title','لا يوجد فرع مفعّل للتوصيل حاليًا'),
@@ -5113,31 +5168,50 @@ async function handleOrder(){
       $('modal-root')._ctx={loc,ranked,cs};return;
     }
 
-    /* Prefer the nearest delivery branch that has its own WhatsApp number.
-       If the nearest enabled branch has no WhatsApp, use the next enabled one
-       that does. If NONE has WhatsApp, fall back to customer service while
-       still recording the geographically nearest branch in the order. */
     const nearest=ranked[0];
     const destination=ranked.find(b=>b.whatsapp)||nearest;
     const wa=destination.whatsapp||cs;
-    console.info('Ocean V40 selected branch',{
+    console.info('Ocean V48 selected branch',{
       code:destination.code,name:destination.name,city:destination.city,
-      distance_km:+destination.distanceKm.toFixed(3),whatsapp:destination.whatsapp||'(customer service fallback)',
+      distance_km:+destination.distanceKm.toFixed(3),
+      whatsapp:destination.whatsapp||'(customer service fallback)',
       user_accuracy_m:loc.accuracy
     });
-    if(wa){openWa(wa,cartMessage(loc,destination));return}
+
+    if(wa){
+      /* Remove the progress modal BEFORE navigation so returning from WhatsApp
+         never leaves a stale "locating" overlay on the magazine. */
+      $('modal-root').innerHTML='';
+      const opened=openWa(wa,cartMessage(loc,destination));
+      if(opened)return;
+    }
 
     showOrderModal(
       ui('branch_phone_error_title','تعذر فتح واتساب الفرع'),
-      ui('branch_phone_error_body','تم تحديد أقرب فرع، لكن رقم واتساب الفرع غير متوفر في الشيت.'),
+      ui('branch_phone_error_body','تم تحديد أقرب فرع، لكن تعذر فتح واتساب تلقائيًا.'),
       (destination.maps?`<a class="maps" href="${esc(destination.maps)}" target="_blank" rel="noopener">${esc(ui('view_branch_map','موقع الفرع على الخريطة'))}</a>`:'')+
+      (wa?`<a class="wa" href="${esc(waUrl(wa,cartMessage(loc,destination)))}">${esc(ui('open_whatsapp','فتح واتساب'))}</a>`:'')+
       `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
     );
     $('modal-root')._ctx={loc,ranked,cs};
-  },err=>{
-    console.warn('Ocean V40 geolocation failed',err?.code,err?.message);
-    showGeoErrorModal(err,cs);
-  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+
+  }catch(err){
+    console.warn('Ocean V48 order routing failed',err);
+    if(err?.code===1||err?.code===2||err?.code===3||/Geolocation/i.test(String(err?.message||''))){
+      showGeoErrorModal(err,cs);
+    }else{
+      showOrderModal(
+        ui('order_routing_error_title','تعذر إكمال تحديد الفرع'),
+        ui('order_routing_error_body','حدث تأخير أثناء تحميل بيانات الفروع. أعد المحاولة، وإذا استمرت المشكلة تواصل معنا.'),
+        `<button class="wa" data-retry-order>${esc(ui('retry','إعادة المحاولة'))}</button>`+
+        `<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`+
+        `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
+      );
+      $('modal-root')._ctx={loc:null,ranked:[],cs};
+    }
+  }finally{
+    ORDER_IN_PROGRESS=false;
+  }
 }
 
 
