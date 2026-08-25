@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="boot-shop" data-build="v28-brand-carousel-continuous">
+<html lang="ar" dir="rtl" class="boot-shop" data-build="v40-google-sheet-nearest-branch">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -2955,6 +2955,142 @@ body.cat-world::before{opacity:.40}
   .product-action .add:active{transform:none}
 }
 
+
+/* ============================================================
+   V41 — STATIC BRAND GALLERY, ALL DEVICES
+   No marquee / autoplay / clones. Brand sizing adapts to the
+   allowed visible-brand count via the existing few/mid/many bucket.
+   ============================================================ */
+
+.brand-marquee,
+.brand-marquee.static,
+.brand-marquee.brand-init{
+  overflow:visible!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+  padding:6px 0 8px!important;
+}
+
+.brand-track{
+  width:100%!important;
+  max-width:100%!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:16px!important;
+  padding:0!important;
+  margin:0 auto!important;
+  animation:none!important;
+  transform:none!important;
+  will-change:auto!important;
+}
+
+.brand-clone{
+  display:none!important;
+}
+
+.brand-item{
+  flex:0 0 auto!important;
+  text-align:center!important;
+}
+
+/* 1–5 visible brands: larger, centered */
+.brand-marquee[data-brand-bucket="few"] .brand-item{
+  width:clamp(118px,10.5vw,150px)!important;
+}
+.brand-marquee[data-brand-bucket="few"] .brand-ring{
+  width:clamp(104px,9.2vw,132px)!important;
+  height:clamp(104px,9.2vw,132px)!important;
+}
+
+/* 6–8 visible brands: medium */
+.brand-marquee[data-brand-bucket="mid"] .brand-item{
+  width:clamp(98px,8.4vw,124px)!important;
+}
+.brand-marquee[data-brand-bucket="mid"] .brand-ring{
+  width:clamp(88px,7.5vw,110px)!important;
+  height:clamp(88px,7.5vw,110px)!important;
+}
+
+/* 9+ visible brands: compact enough to stay balanced */
+.brand-marquee[data-brand-bucket="many"] .brand-track{
+  gap:14px 12px!important;
+}
+.brand-marquee[data-brand-bucket="many"] .brand-item{
+  width:clamp(82px,6.8vw,102px)!important;
+}
+.brand-marquee[data-brand-bucket="many"] .brand-ring{
+  width:clamp(74px,6vw,92px)!important;
+  height:clamp(74px,6vw,92px)!important;
+}
+
+.brand-item strong{
+  min-height:0!important;
+  margin-top:7px!important;
+  line-height:1.35!important;
+}
+
+@media(max-width:700px){
+  .brand-track{
+    gap:12px 8px!important;
+  }
+
+  .brand-marquee[data-brand-bucket="few"] .brand-item{
+    width:calc((100% - 2 * 8px)/3)!important;
+  }
+  .brand-marquee[data-brand-bucket="few"] .brand-ring{
+    width:min(100%,104px)!important;
+    height:auto!important;
+    aspect-ratio:1/1;
+  }
+
+  .brand-marquee[data-brand-bucket="mid"] .brand-item{
+    width:calc((100% - 3 * 8px)/4)!important;
+  }
+  .brand-marquee[data-brand-bucket="mid"] .brand-ring{
+    width:min(100%,88px)!important;
+    height:auto!important;
+    aspect-ratio:1/1;
+  }
+
+  .brand-marquee[data-brand-bucket="many"] .brand-item{
+    width:calc((100% - 3 * 7px)/4)!important;
+  }
+  .brand-marquee[data-brand-bucket="many"] .brand-ring{
+    width:min(100%,78px)!important;
+    height:auto!important;
+    aspect-ratio:1/1;
+  }
+}
+
+@media(max-width:390px){
+  .brand-marquee[data-brand-bucket="mid"] .brand-item,
+  .brand-marquee[data-brand-bucket="many"] .brand-item{
+    width:calc((100% - 2 * 7px)/3)!important;
+  }
+}
+
+
+/* ============================================================
+   V42 — DEDICATED MOBILE MAGAZINE ENGINE
+   Mobile is composed as a magazine, not a squeezed desktop page.
+   Desktop rules above stay intact; this layer only activates <=700px.
+   ============================================================ */
+@media(max-width:700px){
+  :root{--m-gap:10px;--m-radius:16px;--m-dock-h:72px}
+  .shop-header{padding:7px 8px 0!important}.header-main{gap:7px!important}.search{height:42px!important;border-radius:13px!important;font-size:12px!important}.icon-btn{height:42px!important;min-width:42px!important;border-radius:12px!important}.chips-row{padding:6px 0!important}.chips{gap:6px!important}.chip{padding:6px 11px!important;font-size:11px!important}
+  .results-bar{margin:8px 0 10px!important;padding:8px 0!important;border-top:0!important;border-bottom:1px solid var(--cat-border)!important}.result-count{font-size:11.5px!important;color:#52657A!important}.tools{margin-inline-start:auto!important}.view-toggle{display:none!important}.sort{height:36px!important;max-width:148px!important;border-radius:11px!important;font-size:11px!important;padding-inline:8px!important}.active-filters{gap:5px!important;margin-bottom:7px!important}.af{font-size:10px!important;padding:5px 7px!important}
+  .shop-main{padding:8px 8px calc(150px + env(safe-area-inset-bottom))!important}.home-xp{margin-bottom:10px!important}.hx-block,.story-block{margin:10px 0 14px!important}.grid-break{margin-block:14px!important}.all-heading{margin:14px 2px 8px!important}.hx-head,.mod-head,.section-inline-head{margin-bottom:8px!important}.hx-head h2,.all-heading h2,.mod-head h3,.section-inline-head h3{font-size:16px!important;line-height:1.25!important}.eyebrow{font-size:8.5px!important;letter-spacing:.10em!important}.hx-link{font-size:10px!important;padding:5px 8px!important}
+  .hero{margin:2px 0 12px!important;border-radius:16px!important;box-shadow:0 10px 24px rgba(10,42,77,.11)!important}.hero-art{--ocean-ar:1.8!important}
+  .hx-brands{padding:12px 8px 10px!important;margin:10px 0 12px!important;border-radius:16px!important}.hx-brands .hx-head{padding-inline:2px!important}.brand-marquee{padding:2px 0!important;overflow:visible!important}.brand-track{animation:none!important;transform:none!important;display:grid!important;width:100%!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px 6px!important;justify-items:center!important}.brand-item{width:100%!important;min-width:0!important}.brand-ring{width:min(17vw,72px)!important;height:min(17vw,72px)!important;aspect-ratio:1!important}.brand-item strong{font-size:9px!important;line-height:1.25!important;margin-top:5px!important;min-height:22px!important}.brand-marquee[data-brand-count="1"] .brand-track,.brand-marquee[data-brand-count="2"] .brand-track,.brand-marquee[data-brand-count="3"] .brand-track{grid-template-columns:repeat(3,minmax(0,92px))!important;justify-content:center!important}.brand-marquee[data-brand-count="4"] .brand-track,.brand-marquee[data-brand-count="5"] .brand-track{grid-template-columns:repeat(5,minmax(0,82px))!important;justify-content:center!important}.brand-marquee[data-brand-count="1"] .brand-ring,.brand-marquee[data-brand-count="2"] .brand-ring,.brand-marquee[data-brand-count="3"] .brand-ring{width:78px!important;height:78px!important}
+  .m-rail-section{margin:12px -8px 16px;padding:12px 8px 14px;overflow:hidden}.m-rail-section[data-kind="saving"]{background:linear-gradient(180deg,rgba(31,132,56,.07),rgba(255,255,255,0))}.m-rail-section[data-kind="combo"]{background:linear-gradient(180deg,rgba(255,209,102,.13),rgba(255,255,255,0))}.m-rail-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:0 2px 8px}.m-rail-head h3{margin:0;font-size:16px;line-height:1.25;font-weight:950;color:var(--cat-deep)}.m-rail-head span{display:block;font-size:8.5px;font-weight:900;color:var(--cat-accent);letter-spacing:.09em}.m-rail{display:flex!important;gap:10px!important;overflow-x:auto!important;overscroll-behavior-inline:contain;scroll-snap-type:x proximity;padding:2px 8px 5px 2px;scrollbar-width:none}.m-rail::-webkit-scrollbar{display:none}.m-rail>.product-tile{flex:0 0 78vw!important;max-width:310px!important;scroll-snap-align:start!important;min-width:0!important}.m-rail[data-compact="1"]>.product-tile{flex-basis:44vw!important;max-width:185px!important}.m-rail .shelf-card{width:100%!important;min-height:0!important;border-radius:16px!important;padding:8px!important}.m-rail .shelf-img{height:145px!important;border-radius:12px!important}.m-rail[data-compact="1"] .shelf-img{height:128px!important}.m-rail .shelf-card strong{font-size:11px!important;min-height:32px!important}.m-rail .product-action{margin-top:6px!important}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px 8px!important}.grid.list{grid-template-columns:repeat(2,minmax(0,1fr))!important}.grid .product-tile{min-width:0!important}.card{border-radius:16px!important;padding:7px!important;gap:6px!important;box-shadow:0 7px 18px rgba(16,35,61,.06)!important}.card-img{border-radius:12px!important;aspect-ratio:1/1.02!important}.card-img img{max-width:96%!important;max-height:96%!important}.card-body{gap:4px!important}.card-name{font-size:11px!important;line-height:1.4!important;min-height:31px!important;-webkit-line-clamp:2!important}.card-sub{display:none!important}.price-stack{gap:3px!important}.price-line{gap:4px!important}.price-label{font-size:8px!important;min-width:28px!important;padding:3px 5px!important}.old-line .old{font-size:9px!important}.new-line .price{font-size:18px!important}.save{font-size:8.5px!important;padding:3px 6px!important;white-space:nowrap!important}.badge{top:6px!important;right:6px!important;font-size:9px!important;padding:4px 6px!important;border-radius:9px!important;transform:scale(.88);transform-origin:top right}.offer-seal{transform:scale(.78)!important;transform-origin:top right!important}.product-action{margin-top:6px!important;gap:5px!important}.product-action .add{min-height:38px!important;width:100%!important;font-size:10.5px!important;border-radius:10px!important;padding:0 7px!important}.product-action .qty{min-height:38px!important;width:100%!important;grid-template-columns:36px 1fr 36px!important}
+  .mod-feature,.mod-saving,.mod-combo,.mod-brand,.mod-discount,.mod-spotlight,.mod-finale{border-radius:0!important}.mod-divider{display:none!important}.m-spotlight{margin:14px -8px 16px!important;padding:16px 8px 18px!important;background:linear-gradient(160deg,var(--ch-deep,var(--cat-deep)),var(--navy2))!important;color:#fff}.m-spotlight .m-spotlight-card{max-width:340px;margin:auto}.m-spotlight .shelf-card{border:0!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important}.m-spotlight .shelf-img{height:220px!important}.m-spotlight .m-rail-head h3{color:#fff!important}.m-spotlight .m-rail-head span{color:var(--ch-light,var(--cat-light))!important}.grid-complete{margin-top:10px!important;padding:10px 8px 2px!important;font-size:10px!important}
+  .floating-cart{display:none!important}.smart-cart{left:8px!important;right:8px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 16px 42px rgba(6,28,54,.28)!important}.smart-cart-inner{min-height:64px!important;padding:9px 10px!important;gap:8px!important}.cart-summary{cursor:pointer;min-width:0}.cart-summary strong{font-size:10px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cart-summary b{font-size:16px!important}.order-btn{min-height:46px!important;padding:0 13px!important;border-radius:12px!important;font-size:11px!important;white-space:nowrap!important}.back-top{bottom:calc(88px + env(safe-area-inset-bottom))!important;left:10px!important;width:42px!important;height:42px!important}.toast{bottom:calc(92px + env(safe-area-inset-bottom))!important}
+}
+@media(max-width:390px){.brand-track{grid-template-columns:repeat(3,minmax(0,1fr))!important}.m-rail>.product-tile{flex-basis:82vw!important}.m-rail[data-compact="1"]>.product-tile{flex-basis:47vw!important}.new-line .price{font-size:17px!important}}
+
 </style>
 </head>
 <body>
@@ -4144,6 +4280,14 @@ function finaleBlock(pool,used){
   </section>`};
 }
 
+
+function isMobileMagazine(){return !!(window.matchMedia&&window.matchMedia('(max-width:700px)').matches)}
+function mobileRailBlock(kind,picks,title,eyebrow,compact=false){if(!picks||!picks.length)return null;return `<section class="m-rail-section" data-kind="${esc(kind)}"><div class="m-rail-head"><div><span>${esc(eyebrow||ui('chapter_eyebrow','اكتشف'))}</span><h3>${esc(title)}</h3></div></div><div class="m-rail" data-compact="${compact?'1':'0'}">${picks.map(shelfCard).join('')}</div></section>`}
+function mobileFeatureBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&e.price>0&&productImage(e.p)),5,{maxPerBrand:1,maxPerFamily:1});if(picks.length<3)return null;return{picks,html:mobileRailBlock('feature',picks,chapterTitle('feature'),ui('deals_eyebrow','مختارة لك'),false)}}
+function mobileSavingBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&e.save>0&&productImage(e.p)).sort((a,b)=>b.save-a.save),5,{maxPerBrand:2,maxPerFamily:1});if(picks.length<3)return null;return{picks,html:mobileRailBlock('saving',picks,chapterTitle('saving'),ui('saving_eyebrow','وفر أكثر'),true)}}
+function mobileComboBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&isComboOffer(e)&&productImage(e.p)),5,{maxPerBrand:2,maxPerFamily:1});if(picks.length<3)return null;return{picks,html:mobileRailBlock('combo',picks,chapterTitle('combo'),ui('combo_eyebrow','قيمة مضاعفة'),true)}}
+function mobileSpotlightBlock(pool,used){const picks=curate(pool.filter(e=>!used.has(e.id)&&e.price>0&&productImage(e.p)),1,{maxPerBrand:1,maxPerFamily:1});if(!picks.length)return null;const e=picks[0];return{picks,html:`<section class="m-spotlight" data-energy="peak" style="${chapterVars('spotlight')}"><div class="m-rail-head"><div><span>${esc(ui('spotlight_eyebrow','اختيار مميز'))}</span><h3>${esc(chapterTitle('spotlight'))}</h3></div></div><div class="m-spotlight-card">${shelfCard(e)}</div></section>`}}
+
 /* ---------- THE PLAN ----------
    Modules are chosen by priority against real data, then paced: a curated
    module never follows another directly, and two HIGH-energy moments are always
@@ -4169,6 +4313,16 @@ function buildComposition(list){
     return true;
   };
   const mk=(kind,fn)=>{const g=(...a)=>fn(...a);g.kind=kind;return g};
+
+  if(isMobileMagazine()&&mode==='category'){
+    place(8,mk('feature',(p,u)=>mobileFeatureBlock(p,u)));
+    place(14,mk('saving',(p,u)=>mobileSavingBlock(p,u)));
+    place(20,mk('combo',(p,u)=>mobileComboBlock(p,u)));
+    let wowMid=null,wowFinal=null;
+    if(scope>=22){const sp=mobileSpotlightBlock(alive(),used);if(sp){sp.picks.forEach(e=>used.add(e.id));wowMid=sp.html}}
+    const remaining=list.filter(x=>!used.has(x.e.id));
+    return {mode,modules,remaining,used,key:gridKey(),scope,wowMid,wowFinal};
+  }
 
   if(mode==='category'){
     /* priority order from the brief; each is skipped when the data is thin */
@@ -4248,6 +4402,19 @@ function renderComposition(comp,from,to,cur){
   const mods=comp.modules;
   const rhythmActive=comp.mode==='category' && comp.scope>=12;
 
+  if(isMobileMagazine()&&comp.mode==='category'){
+    let i=from;const mobileCaps=[6,8,8,10];
+    if(from===0&&mods.length&&cur.mod===0)parts.push(wrapBreak(mods[cur.mod++].html));
+    while(i<end){
+      if(cur.started&&cur.partial===0){if(comp.wowMid&&!cur.wowMid&&i>=rem.length*0.50){parts.push(wrapBreak(comp.wowMid));cur.wowMid=true}else if(cur.mod<mods.length){parts.push(wrapBreak(mods[cur.mod++].html))}}
+      const cap=mobileCaps[cur.chapter%mobileCaps.length],chunk=Math.min(cap-cur.partial,end-i),tone=cur.chapter%3;
+      for(let k=0;k<chunk;k++)parts.push(card(rem[i+k].e,i+k,tone));
+      i+=chunk;cur.partial+=chunk;cur.started=true;if(cur.partial>=cap){cur.chapter++;cur.partial=0}
+    }
+    if(end>=rem.length&&comp.wowMid&&!cur.wowMid){parts.push(wrapBreak(comp.wowMid));cur.wowMid=true}
+    return parts.join('');
+  }
+
   /* Search/filtered/home-without-modules remain structurally simple. */
   if(!rhythmActive && !mods.length && !comp.wowMid && !comp.wowFinal){
     for(let i=from;i<end;i++)parts.push(card(rem[i].e,i,0));
@@ -4300,8 +4467,8 @@ function renderComposition(comp,from,to,cur){
 let GRID_STATE=null;
 /* Identity of the current result set — when it changes the grid is rebuilt,
    when only the page grows the grid is appended to. */
-function gridKey(){return [SHOP.q,SHOP.cat,SHOP.hot,SHOP.discMin,SHOP.price,SHOP.offer,SHOP.sort,SHOP.view,MISSION?JSON.stringify(MISSION.type)+MISSION.value:''].join('|')}
-function renderResults(){SHOP.page=Math.max(1,SHOP.page);applyCategoryWorld();renderHome();const list=currentResults(),n=list.length,shown=SHOP.page*pageSize();$('result-count').textContent=SHOP.q?tpl(ui('results_search_template'),{query:SHOP.q,count:n}):tpl(ui('results_count_template'),{count:n});$('grid').className='grid'+(SHOP.view==='list'?' list':'');$('view-grid').setAttribute('aria-pressed',SHOP.view==='grid');$('view-list').setAttribute('aria-pressed',SHOP.view==='list');if(!n){$('grid').innerHTML='';$('empty').hidden=false;$('empty').innerHTML=`<h3>${esc(ui('empty_title'))}</h3><p>${esc(ui('empty_body'))}</p>`;$('load-more').hidden=true}else{
+function gridKey(){return [isMobileMagazine()?'mobile':'desktop',SHOP.q,SHOP.cat,SHOP.hot,SHOP.discMin,SHOP.price,SHOP.offer,SHOP.sort,SHOP.view,MISSION?JSON.stringify(MISSION.type)+MISSION.value:''].join('|')}
+function renderResults(){SHOP.page=Math.max(1,SHOP.page);if(isMobileMagazine())SHOP.view='grid';applyCategoryWorld();renderHome();const list=currentResults(),n=list.length,shown=SHOP.page*pageSize();$('result-count').textContent=SHOP.q?tpl(ui('results_search_template'),{query:SHOP.q,count:n}):tpl(ui('results_count_template'),{count:n});$('grid').className='grid'+(SHOP.view==='list'?' list':'');$('view-grid').setAttribute('aria-pressed',SHOP.view==='grid');$('view-list').setAttribute('aria-pressed',SHOP.view==='list');if(!n){$('grid').innerHTML='';$('empty').hidden=false;$('empty').innerHTML=`<h3>${esc(ui('empty_title'))}</h3><p>${esc(ui('empty_body'))}</p>`;$('load-more').hidden=true}else{
     $('empty').hidden=true;
     const grid=$('grid');
     const key=gridKey();
@@ -4383,10 +4550,12 @@ window.oceanProductActionAudit=oceanProductActionAudit;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')releaseUnusedBlobs()});
 /* A breakpoint change alters the column count, so module boundaries are
    recomputed — cheaply, and only when the count actually changes. */
-let LAST_COLS=0,COLS_TIMER=0;
+let LAST_COLS=0,COLS_TIMER=0,LAST_MOBILE=isMobileMagazine();
 window.addEventListener('resize',()=>{
   clearTimeout(COLS_TIMER);
   COLS_TIMER=setTimeout(()=>{
+    const mobileNow=isMobileMagazine();
+    if(mobileNow!==LAST_MOBILE){LAST_MOBILE=mobileNow;GRID_STATE=null;HOME_RENDER_KEY='';refresh(false);return}
     const c=gridColumns();
     if(c===LAST_COLS||!GRID_STATE||!GRID_STATE.comp)return;
     LAST_COLS=c;
@@ -4591,9 +4760,26 @@ function renderHero(){
   return `<section class="hero" style="--hero-bg:${esc(c.background_color||setting('theme_color',''))}" data-target="${esc(c.target_type||'all')}" data-value="${esc(campaignTargetValue(c))}" data-label="${esc(c.title_ar||'')}" role="button" tabindex="0" aria-label="${esc(c.title_ar||ui('campaign_default_title'))}">${art}</section>`;
 }
 function renderSaving(){if(!boolSetting('saving_section_enabled'))return'';const n=intSetting('saving_section_limit',1,100),a=INDEX.filter(e=>!excluded(e)&&e.save>0).sort((x,y)=>y.save-x.save).slice(0,n||INDEX.length);if(a.length<3)return'';a.forEach(e=>HOME_USED.add(e.id));return `<section class="hx-block hx-save"><div class="hx-head"><div><span class="eyebrow">${esc(ui('saving_eyebrow'))}</span><h2>${esc(setting('saving_section_title_ar',''))}</h2></div><button class="hx-link" data-target="saving">${esc(ui('view_all'))}</button></div><div class="shelf">${a.map(shelfCard).join('')}</div></section>`}
-function initBrandCarousel(){requestAnimationFrame(()=>{document.querySelectorAll('.brand-marquee.brand-init').forEach(m=>{const t=m.querySelector('.brand-track');if(!t)return;m.classList.remove('brand-init');/* V33 — the marquee keyframe translates left, which walks content out of view inside an RTL max-content track. Mobile stays static, always. */const narrow=(window.innerWidth||document.documentElement.clientWidth||0)<=700;if(narrow){Array.from(t.querySelectorAll('.brand-clone')).forEach(node=>node.remove());t.style.removeProperty('--brand-roll-distance');m.classList.add('static');return}const autoplay=m.dataset.autoplay==='1',loop=m.dataset.loop==='1';const originals=Array.from(t.children);if(!autoplay||!loop||originals.length<2){m.classList.add('static');return}while(t.children.length>originals.length)t.removeChild(t.lastChild);const segmentWidth=t.scrollWidth,viewport=m.clientWidth;if(!segmentWidth||segmentWidth<120){m.classList.add('static');return}let repeats=Math.max(2,Math.ceil((viewport*2.2)/segmentWidth)+1);for(let r=1;r<repeats;r++)originals.forEach(n=>{const cl=n.cloneNode(true);cl.classList.add('brand-clone');cl.setAttribute('aria-hidden','true');t.appendChild(cl)});t.style.setProperty('--brand-roll-distance',segmentWidth+'px');m.classList.remove('static')})})}
+function initBrandCarousel(){
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.brand-marquee').forEach(m=>{
+      const t=m.querySelector('.brand-track');
+      if(!t)return;
+      t.querySelectorAll('.brand-clone').forEach(n=>n.remove());
+      t.style.removeProperty('--brand-roll-distance');
+      t.style.animation='none';
+      t.style.transform='none';
+      m.classList.remove('brand-init','pause');
+      m.classList.add('static');
+      m.dataset.autoplay='0';
+      m.dataset.loop='0';
+    });
+  });
+}
 let HOME_RENDER_KEY='';
-function renderHome(){const host=$('home');if(!boolSetting('shop_home_enabled')){if(HOME_RENDER_KEY!=='disabled'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='disabled'}return}if(pristine()){const key='home';if(HOME_RENDER_KEY===key&&!host.hidden&&host.innerHTML)return;host.hidden=false;host.innerHTML=renderHero()+renderBrandCarousel()+renderDeals()+liveCampaigns('home_mid').map(campaignStrip).join('')+renderShowcases()+renderSaving()+liveCampaigns('home_bottom').map(campaignStrip).join('')+`<div class="all-heading"><span class="eyebrow">${esc(ui('all_grid_eyebrow'))}</span><h2>${esc(setting('full_grid_title_ar',''))}</h2></div>`;HOME_RENDER_KEY=key;initBrandCarousel();initLazyImages(host);return}if(SHOP.cat&&boolSetting('active_category_banner_enabled')&&!SHOP.q&&!SHOP.hot&&!SHOP.discMin&&!SHOP.price&&!SHOP.offer&&!MISSION){const c=CATEGORY_MAP.get(SHOP.cat);if(c){const key='cat:'+c.category_key;if(HOME_RENDER_KEY!==key||host.hidden||!host.innerHTML){host.hidden=false;host.innerHTML=showBanner(c,false);HOME_RENDER_KEY=key;initLazyImages(host)}return}}if(HOME_RENDER_KEY!=='hidden'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='hidden'}}
+
+function renderMobileHomeMagazine(){const deals=INDEX.filter(e=>!excluded(e)&&e.price>0&&productImage(e.p)).sort((a,b)=>b.disc-a.disc||b.save-a.save).slice(0,5);deals.forEach(e=>HOME_USED.add(e.id));const rail=deals.length>=3?`<section class="m-rail-section" data-kind="feature"><div class="m-rail-head"><div><span>${esc(ui('deals_eyebrow','مختارة لك'))}</span><h3>${esc(setting('deal_theatre_title_ar','أقوى عروض الشهر'))}</h3></div></div><div class="m-rail">${deals.map(shelfCard).join('')}</div></section>`:'';return renderHero()+renderBrandCarousel()+rail+`<div class="all-heading"><span class="eyebrow">${esc(ui('all_grid_eyebrow'))}</span><h2>${esc(setting('full_grid_title_ar',''))}</h2></div>`}
+function renderHome(){const host=$('home');if(!boolSetting('shop_home_enabled')){if(HOME_RENDER_KEY!=='disabled'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='disabled'}return}if(pristine()){const mobile=isMobileMagazine(),key=mobile?'home-mobile':'home';if(HOME_RENDER_KEY===key&&!host.hidden&&host.innerHTML)return;host.hidden=false;host.innerHTML=mobile?renderMobileHomeMagazine():renderHero()+renderBrandCarousel()+renderDeals()+liveCampaigns('home_mid').map(campaignStrip).join('')+renderShowcases()+renderSaving()+liveCampaigns('home_bottom').map(campaignStrip).join('')+`<div class="all-heading"><span class="eyebrow">${esc(ui('all_grid_eyebrow'))}</span><h2>${esc(setting('full_grid_title_ar',''))}</h2></div>`;HOME_RENDER_KEY=key;initBrandCarousel();initLazyImages(host);return}if(SHOP.cat&&boolSetting('active_category_banner_enabled')&&!SHOP.q&&!SHOP.hot&&!SHOP.discMin&&!SHOP.price&&!SHOP.offer&&!MISSION){const c=CATEGORY_MAP.get(SHOP.cat);if(c){const key='cat:'+c.category_key;if(HOME_RENDER_KEY!==key||host.hidden||!host.innerHTML){host.hidden=false;host.innerHTML=showBanner(c,false);HOME_RENDER_KEY=key;initLazyImages(host)}return}}if(HOME_RENDER_KEY!=='hidden'){host.hidden=true;host.innerHTML='';HOME_RENDER_KEY='hidden'}}
 function target(type,value,label=''){type=String(type||'all').trim().toLowerCase();value=String(value||'').trim();if(type==='product'){openQuickView(value);return}const keepCat=SHOP.cat;SHOP.q='';SHOP.cat='';SHOP.hot=false;SHOP.discMin=0;SHOP.price='';SHOP.offer='';SHOP.sort=options('sort')[0]?.engine_key||'';MISSION=null;$('search').value='';$('search-clear').hidden=true;if(type==='category')SHOP.cat=value.toLowerCase();else if(type==='brand')MISSION={type:'brand',value:value.toLowerCase(),label:label||BRAND_MAP.get(value.toLowerCase())?.brand_name_ar||''};else if(type==='discount')SHOP.discMin=num(value);else if(type==='cat_discount'){SHOP.cat=keepCat;SHOP.discMin=num(value)}else if(type==='cat_offer'){SHOP.cat=keepCat;SHOP.offer=value}else if(type==='saving')SHOP.sort='saving';else if(type==='price_lte')MISSION={type:'price_lte',value:num(value),label:label||money(num(value))};else if(type==='item_list')MISSION={type:'item_list',items:value.toLowerCase().split(/[,;|\s]+/).filter(Boolean),label:label||ui('intro_campaign_default')};else if(type==='linked_items'){const rows=linkedCampaignItems(value),items=rows.map(r=>r.item_code);if(!items.length){showToast(ui('linked_items_empty'));return}MISSION={type:'linked_items',campaign_id:value.toLowerCase(),items,label:label||ui('intro_campaign_default'),order:new Map(rows.map(r=>[r.item_code,r.sort_order]))}}$('sort').value=SHOP.sort;refresh();$('result-count').scrollIntoView({behavior:'smooth',block:'start'})}
 
 function renderFilter(){const d=SHOP.discMin,p=SHOP.price,o=SHOP.offer;const discounts=options('discount'),prices=options('price'),offers=options('offer');$('filter-body').innerHTML=`<div class="filter-group"><h3>${esc(ui('filter_discount_heading'))}</h3><div class="filter-options">${discounts.map(x=>{const v=num(x.numeric_value);return `<button class="filter-option ${d===v?'active':''}" data-filter="disc" data-value="${v}">${esc(x.label_ar)}</button>`}).join('')}</div></div><div class="filter-group"><h3>${esc(ui('filter_price_heading'))}</h3><div class="filter-options">${prices.map(x=>`<button class="filter-option ${p===x.option_key?'active':''}" data-filter="price" data-value="${esc(x.option_key)}">${esc(x.label_ar)}</button>`).join('')}</div></div><div class="filter-group"><h3>${esc(ui('filter_offer_heading'))}</h3><div class="filter-options">${offers.map(x=>`<button class="filter-option ${o===x.engine_key?'active':''}" data-filter="offer" data-value="${esc(x.engine_key)}">${esc(x.label_ar)}</button>`).join('')}</div></div>`}
@@ -4623,305 +4809,284 @@ let BRANCHES=null;
 function cartMessage(location,branch,pickup=false){const lines=[ui('order_message_header')+'\n'];let i=1;CART.forEach(v=>{lines.push(`${i}) ${v.name_ar}${v.code?` — ${v.code}`:''}\n   ${ui('order_qty_label')}: ${v.qty}\n   ${ui('order_price_label')}: ${money(v.price)}\n`);i++});lines.push(`${ui('order_total_label')}: ${money(cartTotals().sum)}\n`);if(location)lines.push(`${ui('order_location_label')}:\nhttps://www.google.com/maps?q=${location.lat},${location.lng}\n`);if(branch)lines.push(`${pickup?ui('order_pickup_branch_label'):ui('order_suggested_branch_label')}: ${branch.code?branch.code+' — ':''}${branch.name}`);const footer=ui('order_message_footer');if(footer)lines.push('\n'+footer);return lines.join('\n')}
 function showOrderModal(title,text,actions){$('modal-root').innerHTML=`<div class="modal-backdrop"><div class="modal"><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="modal-actions">${actions}</div></div></div>`}
 /* ============================================================
-   V38 — NEAREST-BRANCH / DELIVERY-RANGE ENGINE
-   The old path reported "outside delivery range" for three reasons that had
-   nothing to do with distance:
+   V40 — FIXED GOOGLE-SHEET NEAREST-BRANCH ROUTING
 
-   1. RADIUS COLLAPSE — the radius came only from a single global setting,
-      read through num(), which returns 0 for an empty/missing value. Every
-      comparison `dist <= 0` is then false, so a branch 300 m away was
-      reported out of range. There was no per-branch radius at all.
-   2. DELIVERY FLAG — eligibility used /^yes$/i, so TRUE, true, 1, y and نعم
-      all evaluated to "delivery disabled" and removed valid branches.
-   3. COORD ZERO — coord() used `v||''`, so a numeric 0 became null and the
-      branch was discarded as having no coordinates.
+   Source of truth supplied by Ocean:
+   Google Sheet ID: 1R3WiRuJkfL1MzaS9DALY04AtrLHZBcWVovA229bBtps
+   Tab: branches
 
-   Plus: a branch with no WhatsApp number was skipped entirely instead of
-   falling back to customer service, and a geolocation failure produced the
-   same dead end as a genuine out-of-range result.
+   IMPORTANT DATA CONTRACT
+   -----------------------
+   Store Id             -> branch code
+   Branch Name          -> English branch name
+   اسم الفرع            -> Arabic branch name
+   اسم الشارع           -> street
+   اسم الحي             -> district
+   المدينة              -> city
+   long , Latid         -> coordinates stored as "LATITUDE, LONGITUDE"
+   الرقم الموحد         -> unified/customer-service phone (informational)
+   رقم الفرع الداخلي    -> branch WhatsApp destination
+   حالة التوصيل         -> ONLY TRUE/Yes/1 branches can receive delivery orders
+   google link          -> branch Google Maps URL
 
-   The rule now: examine EVERY eligible branch, sort by real distance, and
-   only report out-of-range when zero branches can serve the location.
+   The supplied sheet has NO delivery-radius column. Therefore V40 NEVER
+   invents a radius and NEVER reports "outside delivery range". The order is
+   routed to the geographically nearest delivery-enabled branch with valid
+   coordinates. This matches what the backend can actually prove.
    ============================================================ */
 
-const DEFAULT_DELIVERY_RADIUS_KM = 15;   // used only when nothing is configured
-const BRANCH_DIAG = { rows: 0, parsed: 0, rejected: [], swapped: [], radiusSource: '', unitConverted: [] };
-let LAST_GEO = null;
+const BRANCH_SHEET_ID='1R3WiRuJkfL1MzaS9DALY04AtrLHZBcWVovA229bBtps';
+const BRANCH_SHEET_NAME='branches';
+const BRANCHES_API_URL=`https://opensheet.elk.sh/${BRANCH_SHEET_ID}/${encodeURIComponent(BRANCH_SHEET_NAME)}`;
+const BRANCH_CACHE_MS=5*60*1000;
+let BRANCHES_LOADED_AT=0,LAST_GEO=null;
+const BRANCH_DIAG={endpoint:BRANCHES_API_URL,rows:0,parsed:0,deliveryEnabled:0,rejected:[]};
 
-/* Field name variants seen across backend sheets. */
-const F_LAT      = ['latitude','lat','branch_lat','branch latitude','store_lat','خط العرض','خطالعرض'];
-const F_LNG      = ['longitude','lng','lon','long','branch_lng','branch longitude','store_lng','خط الطول','خطالطول'];
-const F_RADIUS   = ['delivery_radius_km','delivery radius km','radius_km','delivery_radius','delivery radius',
-                    'radius','delivery_range','service_radius','delivery_radius_m','radius_meters','radius_m',
-                    'نطاق التوصيل','مدى التوصيل'];
-const F_ACTIVE   = ['active','is_active','enabled','status','state','الحالة','فعال'];
-const F_DELIVERY = ['delivery','delevery','delivery_enabled','home_delivery','deliveryavailable','توصيل'];
-const F_CLOSED   = ['closed','permanently_closed','is_closed','shutdown','مغلق','مغلق نهائيا'];
-const F_OPEN     = ['open_now','is_open','open','currently_open','مفتوح'];
-const F_NAME     = ['business name','name','branch_name','اسم الفرع'];
-const F_CODE     = ['store code','code','branch_code','كود الفرع'];
-const F_WA       = ['whatsapp','whats app link','whatsapp link','wa','واتساب'];
-const F_MAPS     = ['google maps location','google maps','maps','location link','map'];
-
-const cleanKey = x => String(x||'').trim().toLowerCase().replace(/[\s_\-\/]+/g,'');
-/* Returns the matched key as well as the value, so units can be inferred from
-   the column NAME (radius_m vs radius_km) instead of guessed from magnitude. */
-function pick(row,names){
+const cleanKey=x=>String(x??'').trim().toLowerCase().replace(/[\s_\-\/،,]+/g,'');
+function branchPick(row,names){
   const wanted=names.map(cleanKey);
-  for(const k of Object.keys(row||{})){
-    if(wanted.includes(cleanKey(k)))return {found:true,key:k,value:row[k]};
-  }
-  return {found:false,key:'',value:undefined};
+  for(const k of Object.keys(row||{}))if(wanted.includes(cleanKey(k)))return{found:true,key:k,value:row[k]};
+  return{found:false,key:'',value:undefined};
 }
-function cell(row,names){return pick(row,names).value ?? ''}
+function branchCell(row,names){const h=branchPick(row,names);return h.found?h.value:''}
 
-const BOOL_TRUE  = /^(true|yes|y|1|on|active|enabled|open|available|نعم|فعال|مفعل|متاح)$/i;
-const BOOL_FALSE = /^(false|no|n|0|off|inactive|disabled|closed|unavailable|لا|مغلق|معطل|غير متاح)$/i;
-/* A MISSING column is not the same as a column set to false. A sheet that
-   never had a "delivery" column must not silently disable every branch. */
-function branchBool(row,names,whenMissing){
-  const hit=pick(row,names);
-  if(!hit.found)return whenMissing;
-  const v=hit.value;
+const B_TRUE=/^(true|yes|y|1|on|active|enabled|available|نعم|صح|فعال|مفعل|متاح)$/i;
+const B_FALSE=/^(false|no|n|0|off|inactive|disabled|unavailable|لا|خطأ|غير فعال|معطل|غير متاح)$/i;
+function branchBool(row,names,whenMissing=false){
+  const h=branchPick(row,names);
+  if(!h.found)return whenMissing;
+  const v=h.value;
   if(typeof v==='boolean')return v;
   if(typeof v==='number')return v!==0;
-  const s=String(v==null?'':v).trim();
+  const s=String(v??'').trim();
   if(!s)return whenMissing;
-  if(BOOL_TRUE.test(s))return true;
-  if(BOOL_FALSE.test(s))return false;
+  if(B_TRUE.test(s))return true;
+  if(B_FALSE.test(s))return false;
   return whenMissing;
 }
-/* Accepts numbers, "24.77", "24,77". Critically, 0 is a real coordinate. */
-function coord(v){
+
+function branchNum(v){
   if(typeof v==='number')return Number.isFinite(v)?v:null;
-  const s=String(v==null?'':v).trim();
-  if(!s)return null;
-  const n=parseFloat(s.replace(/[,،]/g,'.').replace(/[^0-9.\-]/g,''));
+  const s=String(v??'').trim();if(!s)return null;
+  const n=Number(s.replace(/،/g,'.').replace(/[^0-9.\-]/g,''));
   return Number.isFinite(n)?n:null;
 }
 function validLat(v){return Number.isFinite(v)&&v>=-90&&v<=90}
 function validLng(v){return Number.isFinite(v)&&v>=-180&&v<=180}
 
-/* Radius in KM. Unit comes from the column name when it says so, otherwise
-   from magnitude — a pharmacy delivery radius is never 5000 km, so a value
-   that large is metres. Every conversion is recorded, never silent. */
-function toRadiusKm(hit,branchName){
-  if(!hit.found)return null;
-  const raw=hit.value;
-  const n=parseFloat(String(raw==null?'':raw).replace(/[,،]/g,'.').replace(/[^0-9.\-]/g,''));
-  if(!Number.isFinite(n)||n<=0)return null;
-  const key=cleanKey(hit.key);
-  const saysMetres=/(^|[^k])m$|meters|metres|بالمتر/.test(key)&&!/km/.test(key);
-  if(saysMetres){BRANCH_DIAG.unitConverted.push(`${branchName}: ${n} (column "${hit.key}" is metres) -> ${n/1000} km`);return n/1000}
-  if(n>200){BRANCH_DIAG.unitConverted.push(`${branchName}: ${n} is implausible as km -> treated as metres -> ${n/1000} km`);return n/1000}
-  return n;
+/* The backend header says "long , Latid", but the supplied values are
+   actually "24.x, 46.x" = latitude first, longitude second. */
+function parseCombinedCoords(v){
+  const raw=String(v??'').trim();if(!raw)return null;
+  const nums=raw.match(/-?\d+(?:\.\d+)?/g);
+  if(!nums||nums.length<2)return null;
+  let a=Number(nums[0]),b=Number(nums[1]);
+  if(!Number.isFinite(a)||!Number.isFinite(b))return null;
+  if(validLat(a)&&validLng(b))return{lat:a,lng:b};
+  if(validLat(b)&&validLng(a))return{lat:b,lng:a};
+  return null;
+}
+function coordsFromMapsUrl(url){
+  const s=String(url||'').trim();if(!s)return null;
+  const decoded=(()=>{try{return decodeURIComponent(s)}catch{return s}})();
+  const patterns=[
+    /[?&](?:q|query|ll)=(-?\d{1,2}(?:\.\d+)?)[,%2C\s]+(-?\d{1,3}(?:\.\d+)?)/i,
+    /@(-?\d{1,2}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
+    /\/(-?\d{1,2}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)(?:[/?#]|$)/
+  ];
+  for(const p of patterns){const m=decoded.match(p);if(m){const lat=+m[1],lng=+m[2];if(validLat(lat)&&validLng(lng))return{lat,lng}}}
+  return null;
+}
+function normalizeWhatsApp(v){
+  let s=String(v??'').trim().replace(/\.0+$/,'').replace(/\D/g,'');
+  if(!s)return'';
+  if(s.startsWith('00'))s=s.slice(2);
+  if(/^05\d{8}$/.test(s))s='966'+s.slice(1);
+  else if(/^5\d{8}$/.test(s))s='966'+s;
+  return s;
 }
 
-/* Haversine, kilometres. Argument order is (userLat,userLng,branchLat,branchLng). */
 function distanceKm(lat1,lon1,lat2,lon2){
   const R=6371;
-  const dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2
-        + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  const dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
   return 2*R*Math.asin(Math.min(1,Math.sqrt(a)));
 }
 const hav=distanceKm;
 
-function globalRadiusKm(){
-  const raw=String(setting('delivery_radius_km','')).trim();
-  const n=parseFloat(raw.replace(/[^0-9.\-]/g,''));
-  if(Number.isFinite(n)&&n>0){BRANCH_DIAG.radiusSource=`setting delivery_radius_km = ${n} km`;return n}
-  BRANCH_DIAG.radiusSource=`no usable delivery_radius_km setting — falling back to ${DEFAULT_DELIVERY_RADIUS_KM} km`;
-  return DEFAULT_DELIVERY_RADIUS_KM;
+async function branches(force=false){
+  if(!force&&BRANCHES&&Date.now()-BRANCHES_LOADED_AT<BRANCH_CACHE_MS)return BRANCHES;
+  let response;
+  try{response=await fetchData('ocean-branches-v40',BRANCHES_API_URL,{force})}
+  catch(err){console.warn('Ocean V40: branch Google Sheet request failed',err);BRANCHES=null;return[]}
+  const data=Array.isArray(response?.data)?response.data:[];
+  BRANCH_DIAG.rows=data.length;BRANCH_DIAG.rejected=[];BRANCH_DIAG.deliveryEnabled=0;
+  const F_COORD=['long , Latid','long, latid','long latid','coordinates','coords','الإحداثيات'];
+  const F_LAT=['latitude','lat','branch_lat','خط العرض'];
+  const F_LNG=['longitude','lng','lon','long','branch_lng','خط الطول'];
+  const F_NAME_AR=['اسم الفرع','branch_name_ar','name_ar'];
+  const F_NAME_EN=['Branch Name','branch name','name','business name'];
+  const F_CODE=['Store Id','store id','store_id','branch_code','code','كود الفرع'];
+  const F_STREET=['اسم الشارع','street'];
+  const F_DISTRICT=['اسم الحي','district','neighborhood'];
+  const F_CITY=['المدينة','city'];
+  const F_UNIFIED=['الرقم الموحد','unified number','customer service'];
+  const F_WA=['رقم الفرع الداخلي','whatsapp','whats app','whatsapp number','branch whatsapp'];
+  const F_DELIVERY=['حالة التوصيل','delivery','delivery_enabled','home_delivery','توصيل'];
+  const F_MAP=['google link','google maps','google maps location','maps','map'];
+  const F_ACTIVE=['active','is_active','enabled','فعال'];
+
+  BRANCHES=data.map((r,i)=>{
+    const coordPair=parseCombinedCoords(branchCell(r,F_COORD));
+    let lat=coordPair?.lat??branchNum(branchCell(r,F_LAT));
+    let lng=coordPair?.lng??branchNum(branchCell(r,F_LNG));
+    const maps=String(branchCell(r,F_MAP)||'').trim();
+    if((!validLat(lat)||!validLng(lng))&&maps){const p=coordsFromMapsUrl(maps);if(p){lat=p.lat;lng=p.lng}}
+    const delivery=branchBool(r,F_DELIVERY,false); // supplied sheet: blank means NOT enabled
+    if(delivery)BRANCH_DIAG.deliveryEnabled++;
+    const nameAr=String(branchCell(r,F_NAME_AR)||'').trim();
+    const nameEn=String(branchCell(r,F_NAME_EN)||'').trim();
+    const code=String(branchCell(r,F_CODE)||'').trim();
+    const b={
+      id:code||String(i),code,name:nameAr||nameEn||code||`فرع ${i+1}`,nameAr,nameEn,
+      street:String(branchCell(r,F_STREET)||'').trim(),
+      district:String(branchCell(r,F_DISTRICT)||'').trim(),
+      city:String(branchCell(r,F_CITY)||'').trim(),
+      unified:normalizeWhatsApp(branchCell(r,F_UNIFIED)),
+      whatsapp:normalizeWhatsApp(branchCell(r,F_WA)),
+      maps,lat,lng,delivery,
+      active:branchBool(r,F_ACTIVE,true),
+      coordsValid:validLat(lat)&&validLng(lng)
+    };
+    if(!b.coordsValid)BRANCH_DIAG.rejected.push(`${b.code||b.name}: invalid coordinates (${lat}, ${lng})`);
+    return b;
+  });
+  BRANCH_DIAG.parsed=BRANCHES.filter(b=>b.coordsValid).length;
+  BRANCHES_LOADED_AT=Date.now();
+  console.info('Ocean V40 branches loaded',{
+    endpoint:BRANCHES_API_URL,total:BRANCH_DIAG.rows,valid_coordinates:BRANCH_DIAG.parsed,
+    delivery_enabled:BRANCH_DIAG.deliveryEnabled,rejected:BRANCH_DIAG.rejected.length
+  });
+  return BRANCHES;
 }
 
-async function branches(){
-  if(BRANCHES)return BRANCHES;
-  const url=String(setting('branches_api_url','')).trim();
-  if(!url)return[];
-  try{
-    const {data}=await fetchData('branches',url);
-    const fallbackKm=globalRadiusKm();
-    BRANCH_DIAG.rows=data.length;BRANCH_DIAG.rejected=[];BRANCH_DIAG.swapped=[];BRANCH_DIAG.unitConverted=[];
-    BRANCHES=data.map((r,i)=>{
-      const name=String(cell(r,F_NAME)||`#${i}`);
-      let lat=coord(cell(r,F_LAT)), lng=coord(cell(r,F_LNG));
-      /* Unambiguous transposition only: a "latitude" past ±90 that would be a
-         valid longitude, paired with a longitude that would be a valid
-         latitude. Corrected and reported, never fixed silently. */
-      if(lat!=null&&lng!=null&&!validLat(lat)&&validLng(lat)&&validLat(lng)){
-        const t=lat;lat=lng;lng=t;
-        BRANCH_DIAG.swapped.push(name);
-      }
-      const perBranch=toRadiusKm(pick(r,F_RADIUS),name);
-      const b={
-        id:i,name,
-        code:String(cell(r,F_CODE)||''),
-        whatsapp:String(cell(r,F_WA)||'').replace(/\s/g,''),
-        maps:String(cell(r,F_MAPS)||''),
-        lat,lng,
-        radiusKm:perBranch!=null?perBranch:fallbackKm,
-        radiusFromBranch:perBranch!=null,
-        active:branchBool(r,F_ACTIVE,true),          // missing column => active
-        delivery:branchBool(r,F_DELIVERY,true),      // missing column => delivery allowed
-        permanentlyClosed:branchBool(r,F_CLOSED,false),
-        openNow:branchBool(r,F_OPEN,true),           // missing column => assume open
-        coordsValid:validLat(lat)&&validLng(lng)
-      };
-      if(!b.coordsValid)BRANCH_DIAG.rejected.push(`${name}: bad coordinates (lat=${lat}, lng=${lng})`);
-      return b;
-    });
-    BRANCH_DIAG.parsed=BRANCHES.filter(b=>b.coordsValid).length;
-    if(BRANCH_DIAG.swapped.length)console.warn('Ocean branches: latitude/longitude looked transposed and were corrected for:',BRANCH_DIAG.swapped);
-    if(BRANCH_DIAG.unitConverted.length)console.warn('Ocean branches: radius unit conversions applied:',BRANCH_DIAG.unitConverted);
-    if(BRANCH_DIAG.rejected.length)console.warn('Ocean branches: rows skipped for invalid coordinates:',BRANCH_DIAG.rejected);
-    return BRANCHES;
-  }catch(err){console.warn('Ocean branches: load failed',err);return[]}
-}
-
-/* THE SELECTION. Scores every eligible branch, never stops at the first one. */
+/* Only delivery-enabled rows participate. No radius exists in this backend. */
 function rankBranches(list,loc){
   return list
-    .filter(b=>b.coordsValid)
-    .map(b=>{
-      const d=distanceKm(loc.lat,loc.lng,b.lat,b.lng);
-      const eligible=b.active&&!b.permanentlyClosed&&b.delivery;
-      return Object.assign({},b,{
-        distanceKm:d,
-        eligible,
-        withinRange:eligible&&d<=b.radiusKm,
-        servable:eligible&&d<=b.radiusKm&&b.openNow
-      });
-    })
+    .filter(b=>b.coordsValid&&b.active&&b.delivery)
+    .map(b=>Object.assign({},b,{distanceKm:distanceKm(loc.lat,loc.lng,b.lat,b.lng)}))
     .sort((a,b)=>a.distanceKm-b.distanceKm);
 }
 function logBranchTable(ranked,loc){
-  try{
-    console.debug(`Ocean delivery check — user ${loc.lat.toFixed(5)}, ${loc.lng.toFixed(5)} | ${BRANCH_DIAG.radiusSource}`);
-    console.table(ranked.slice(0,10).map(b=>({
-      name:b.name,lat:b.lat,lng:b.lng,
-      distance_km:Math.round(b.distanceKm*100)/100,
-      radius_km:b.radiusKm,radius_from_branch:b.radiusFromBranch,
-      active:b.active,delivery_enabled:b.delivery,open_now:b.openNow,
-      within_range:b.withinRange
-    })));
-  }catch{}
+  try{console.table(ranked.slice(0,10).map(b=>({
+    code:b.code,name:b.name,city:b.city,distance_km:+b.distanceKm.toFixed(3),
+    whatsapp:b.whatsapp?'yes':'no',delivery_enabled:b.delivery,lat:b.lat,lng:b.lng
+  })))}catch{}
 }
 
-/* Developer entry point. Pass explicit coordinates to test without a fix. */
 async function oceanBranchDebug(lat,lng){
-  const list=await branches();
+  const list=await branches(true);
   let loc=null;
   if(Number.isFinite(lat)&&Number.isFinite(lng))loc={lat,lng};
   else if(LAST_GEO)loc=LAST_GEO;
   else if(navigator.geolocation){
     loc=await new Promise(res=>navigator.geolocation.getCurrentPosition(
-      p=>res({lat:p.coords.latitude,lng:p.coords.longitude}),()=>res(null),
-      {enableHighAccuracy:true,timeout:12000,maximumAge:60000}));
+      p=>res({lat:p.coords.latitude,lng:p.coords.longitude,accuracy:p.coords.accuracy}),()=>res(null),
+      {enableHighAccuracy:true,timeout:15000,maximumAge:0}));
   }
-  if(!loc){
-    const out={error:'no user position — call oceanBranchDebug(lat,lng)',total_branches:list.length,
-      valid_coordinate_branches:list.filter(b=>b.coordsValid).length,radius_source:BRANCH_DIAG.radiusSource};
-    console.info('Ocean branch debug',out);return out;
-  }
+  if(!loc){const out={error:'No user position',branch_endpoint:BRANCHES_API_URL,total_rows:list.length};console.info(out);return out}
   const ranked=rankBranches(list,loc);
-  const selected=ranked.find(b=>b.servable)||null;
+  const selected=ranked.find(b=>b.whatsapp)||ranked[0]||null;
   const out={
-    user_lat:loc.lat,user_lng:loc.lng,
-    total_branches:list.length,
-    valid_coordinate_branches:list.filter(b=>b.coordsValid).length,
-    eligible_delivery_branches:ranked.filter(b=>b.eligible).length,
-    radius_source:BRANCH_DIAG.radiusSource,
-    coordinate_issues:BRANCH_DIAG.rejected,
-    transposed_coordinates_fixed:BRANCH_DIAG.swapped,
-    radius_unit_conversions:BRANCH_DIAG.unitConverted,
-    suspected_transposition:ranked.filter(b=>{
-      if(b.distanceKm<500)return false;
-      if(!validLat(b.lng)||!validLng(b.lat))return false;
-      return distanceKm(loc.lat,loc.lng,b.lng,b.lat)<50;
-    }).map(b=>`${b.name}: ${Math.round(b.distanceKm)} km away, but swapping lat/lng puts it ${Math.round(distanceKm(loc.lat,loc.lng,b.lng,b.lat))} km away — check the sheet columns`),
-    nearest_branches:ranked.slice(0,Math.max(5,Math.min(10,ranked.length))).map(b=>({
-      name:b.name,lat:b.lat,lng:b.lng,
-      distance_km:Math.round(b.distanceKm*1000)/1000,
-      radius_km:b.radiusKm,
-      active:b.active,delivery_enabled:b.delivery,
-      open_now:b.openNow,within_range:b.withinRange
+    branch_endpoint:BRANCHES_API_URL,
+    user_lat:loc.lat,user_lng:loc.lng,accuracy_m:loc.accuracy??null,
+    total_rows:list.length,
+    valid_coordinate_rows:list.filter(b=>b.coordsValid).length,
+    delivery_enabled_rows:list.filter(b=>b.delivery).length,
+    eligible_rows:ranked.length,
+    rejected_coordinates:BRANCH_DIAG.rejected,
+    nearest_branches:ranked.slice(0,10).map(b=>({
+      code:b.code,name:b.name,city:b.city,distance_km:+b.distanceKm.toFixed(3),
+      whatsapp:b.whatsapp||'',delivery_enabled:b.delivery,google_link:b.maps
     })),
-    selected_branch:selected?{name:selected.name,code:selected.code,
-      distance_km:Math.round(selected.distanceKm*1000)/1000,radius_km:selected.radiusKm}:null
+    selected_branch:selected?{code:selected.code,name:selected.name,distance_km:+selected.distanceKm.toFixed(3),whatsapp:selected.whatsapp||''}:null
   };
-  console.info('Ocean branch debug',out);
-  logBranchTable(ranked,loc);
-  return out;
+  console.info('Ocean V40 branch debug',out);logBranchTable(ranked,loc);return out;
 }
 window.oceanBranchDebug=oceanBranchDebug;
+window.oceanReloadBranches=()=>{BRANCHES=null;BRANCHES_LOADED_AT=0;return branches(true)};
 
 function geoErrorText(err){
-  const code=err&&err.code;
-  if(code===1)return ui('geo_denied','لم يتم السماح بالوصول إلى موقعك');
-  if(code===3)return ui('geo_timeout','انتهت مهلة تحديد الموقع، حاول مرة أخرى');
+  if(err?.code===1)return ui('geo_denied','لم يتم السماح بالوصول إلى موقعك');
+  if(err?.code===3)return ui('geo_timeout','انتهت مهلة تحديد الموقع، حاول مرة أخرى');
   return ui('geo_unavailable','تعذر تحديد موقعك حاليًا');
 }
 function showGeoErrorModal(err,cs){
-  showOrderModal(
-    ui('geo_error_title','تعذر تحديد الموقع'),
-    geoErrorText(err),
-    `<button class="wa" data-retry-order>${esc(ui('retry','إعادة المحاولة'))}</button>`
-    +`<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`
-    +`<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
-  );
+  showOrderModal(ui('geo_error_title','تعذر تحديد الموقع'),geoErrorText(err),
+    `<button class="wa" data-retry-order>${esc(ui('retry','إعادة المحاولة'))}</button>`+
+    `<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`+
+    `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`);
   $('modal-root')._ctx={loc:null,ranked:[],cs};
 }
 
 async function handleOrder(){
   if(!CART.size){showToast(ui('order_empty_toast','السلة فارغة'));return}
   const cs=String(setting('customer_service_whatsapp','')).replace(/\D/g,'');
-  if(!navigator.geolocation){openWa(cs,cartMessage(null,null));return}
+  if(!navigator.geolocation){showGeoErrorModal({code:2},cs);return}
   showToast(ui('locating_branch','جارٍ تحديد أقرب فرع…'));
+
   const bs=await branches();
+  if(!bs.length){
+    showOrderModal(
+      ui('branch_data_error_title','تعذر تحميل بيانات الفروع'),
+      ui('branch_data_error_body','لم نتمكن من قراءة شيت الفروع حاليًا. حاول مرة أخرى أو تواصل مع خدمة العملاء.'),
+      `<button class="wa" data-retry-order>${esc(ui('retry','إعادة المحاولة'))}</button>`+
+      `<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`+
+      `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
+    );
+    $('modal-root')._ctx={loc:null,ranked:[],cs};return;
+  }
+
   navigator.geolocation.getCurrentPosition(pos=>{
-    const loc={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    const loc={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy};
     LAST_GEO=loc;
     const ranked=rankBranches(bs,loc);
     logBranchTable(ranked,loc);
-
-    /* nearest branch that is eligible, in range, and open */
-    const serving=ranked.find(b=>b.servable);
-    if(serving){openWa(serving.whatsapp||cs,cartMessage(loc,serving));return}
-
-    /* In range but currently closed is NOT the same as out of range. */
-    const closedInRange=ranked.find(b=>b.withinRange&&!b.openNow);
-    const nearest=ranked[0];
-    const pickupActions=nearest
-      ? `<button class="wa" data-pickup="${nearest.id}">${esc(ui('pickup_nearest','الاستلام من أقرب فرع'))}</button>`
-        +(nearest.maps?`<a class="maps" href="${esc(nearest.maps)}" target="_blank" rel="noopener">${esc(ui('view_branch_map','موقع الفرع على الخريطة'))}</a>`:'')
-      : '';
-    if(closedInRange){
-      console.info(`Ocean: nearest serving branch "${closedInRange.name}" is in range (${closedInRange.distanceKm.toFixed(2)} km / ${closedInRange.radiusKm} km) but marked closed.`);
+    if(!ranked.length){
       showOrderModal(
-        ui('branch_closed_title','أقرب فرع غير متاح حاليًا'),
-        ui('branch_closed_body','الفرع الأقرب إليك ضمن نطاق التوصيل لكنه مغلق الآن.'),
-        pickupActions+`<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button><button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
+        ui('branch_unavailable_title','لا يوجد فرع مفعّل للتوصيل حاليًا'),
+        ui('branch_unavailable_body','لا توجد فروع بحالة توصيل مفعّلة وإحداثيات صالحة في شيت الفروع حاليًا.'),
+        `<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button>`+
+        `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
       );
-    }else{
-      const suspect=ranked.filter(b=>b.distanceKm>=500&&validLat(b.lng)&&validLng(b.lat)&&distanceKm(loc.lat,loc.lng,b.lng,b.lat)<50);
-      if(suspect.length)console.warn('Ocean: these branches are implausibly far but would be nearby with latitude/longitude swapped — check the sheet columns:',suspect.map(b=>b.name));
-      console.info('Ocean: no branch covers this location.',
-        {nearest_km:nearest?Math.round(nearest.distanceKm*100)/100:null,
-         nearest_radius_km:nearest?nearest.radiusKm:null,
-         eligible:ranked.filter(b=>b.eligible).length,
-         radius_source:BRANCH_DIAG.radiusSource,
-         hint:'run oceanBranchDebug() for the full table'});
-      showOrderModal(ui('outside_delivery_title','خارج نطاق التوصيل'),
-        ui('outside_delivery_body','لا يوجد فرع يغطي موقعك حاليًا. يمكنك الاستلام من أقرب فرع أو التواصل معنا.'),
-        pickupActions+`<button class="wa" data-support>${esc(ui('contact_support','تواصل معنا'))}</button><button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`);
+      $('modal-root')._ctx={loc,ranked,cs};return;
     }
+
+    /* Prefer the nearest delivery branch that has its own WhatsApp number.
+       If the nearest enabled branch has no WhatsApp, use the next enabled one
+       that does. If NONE has WhatsApp, fall back to customer service while
+       still recording the geographically nearest branch in the order. */
+    const nearest=ranked[0];
+    const destination=ranked.find(b=>b.whatsapp)||nearest;
+    const wa=destination.whatsapp||cs;
+    console.info('Ocean V40 selected branch',{
+      code:destination.code,name:destination.name,city:destination.city,
+      distance_km:+destination.distanceKm.toFixed(3),whatsapp:destination.whatsapp||'(customer service fallback)',
+      user_accuracy_m:loc.accuracy
+    });
+    if(wa){openWa(wa,cartMessage(loc,destination));return}
+
+    showOrderModal(
+      ui('branch_phone_error_title','تعذر فتح واتساب الفرع'),
+      ui('branch_phone_error_body','تم تحديد أقرب فرع، لكن رقم واتساب الفرع غير متوفر في الشيت.'),
+      (destination.maps?`<a class="maps" href="${esc(destination.maps)}" target="_blank" rel="noopener">${esc(ui('view_branch_map','موقع الفرع على الخريطة'))}</a>`:'')+
+      `<button class="ghost" data-close-modal>${esc(ui('close','إغلاق'))}</button>`
+    );
     $('modal-root')._ctx={loc,ranked,cs};
   },err=>{
-    /* A geolocation failure is never a delivery-range verdict. */
-    console.warn('Ocean: geolocation failed',err&&err.code,err&&err.message);
+    console.warn('Ocean V40 geolocation failed',err?.code,err?.message);
     showGeoErrorModal(err,cs);
-  },{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
 
 
@@ -4960,7 +5125,7 @@ $('filter-clear').onclick=()=>{SHOP.discMin=0;SHOP.price='';SHOP.offer='';render
 $('filter-body').onclick=e=>{const b=e.target.closest('[data-filter]');if(!b)return;const k=b.dataset.filter,v=b.dataset.value;if(k==='disc')SHOP.discMin=SHOP.discMin===+v?0:+v;if(k==='price')SHOP.price=SHOP.price===v?'':v;if(k==='offer')SHOP.offer=SHOP.offer===v?'':v;renderFilter()};
 $('more-open').onclick=()=>{$('more-menu').hidden=!$('more-menu').hidden};$('refresh').onclick=()=>{$('more-menu').hidden=true;loadAll(true)};
 document.addEventListener('click',e=>{if(!e.target.closest('.header-menu'))$('more-menu').hidden=true;if(!e.target.closest('.search-wrap'))$('suggest').hidden=true});
-$('floating-cart').onclick=openCart;$('order-btn').onclick=handleOrder;$('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});window.addEventListener('scroll',()=>{$('back-top').classList.toggle('show',window.scrollY>700)},{passive:true});
+$('floating-cart').onclick=openCart;$('order-btn').onclick=handleOrder;const cartSummaryEl=document.querySelector('.cart-summary');if(cartSummaryEl)cartSummaryEl.onclick=()=>{if(isMobileMagazine())openCart()};$('back-top').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});window.addEventListener('scroll',()=>{$('back-top').classList.toggle('show',window.scrollY>700)},{passive:true});
 document.addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add){cartAdd(add.dataset.add);return}const rem=e.target.closest('[data-remove]');if(rem){cartRemove(rem.dataset.remove);return}const del=e.target.closest('[data-cart-delete]');if(del){cartDelete(del.dataset.cartDelete);return}if(e.target.closest('[data-close-cart]')){closeSheetRoot($('cart-root'));return}if(e.target.closest('[data-close-qv]')){closeSheetRoot($('qv-root'));return}const prod=e.target.closest('[data-product]');if(prod){openQuickView(prod.dataset.product);return}const cat=e.target.closest('[data-category]');if(cat){SHOP.q='';SHOP.cat=cat.dataset.category;SHOP.hot=false;MISSION=null;refresh();return}const t=e.target.closest('[data-target]');if(t){target(t.dataset.target,t.dataset.value,t.dataset.label);return}const cf=e.target.closest('[data-clear-filter]');if(cf){const k=cf.dataset.clearFilter;if(k==='q'){SHOP.q='';$('search').value=''}if(k==='cat')SHOP.cat='';if(k==='hot')SHOP.hot=false;if(k==='disc')SHOP.discMin=0;if(k==='price')SHOP.price='';if(k==='offer')SHOP.offer='';if(k==='mission')MISSION=null;refresh();return}if(e.target.closest('[data-clear-all]')){resetFilters();return}if(e.target.closest('[data-cart-order]')){closeSheetRoot($('cart-root'));handleOrder();return}const sp=e.target.closest('[data-suggest-product]');if(sp){$('suggest').hidden=true;openQuickView(sp.dataset.suggestProduct);return}if(e.target.closest('[data-close-modal]')){$('modal-root').innerHTML='';return}if(e.target.closest('[data-retry-order]')){$('modal-root').innerHTML='';handleOrder();return}if(e.target.closest('[data-support]')){const ctx=$('modal-root')._ctx;openWa(ctx?.cs,cartMessage(ctx?.loc,null));$('modal-root').innerHTML='';return}const pk=e.target.closest('[data-pickup]');if(pk){const ctx=$('modal-root')._ctx,b=ctx?.ranked?.find(x=>String(x.id)===pk.dataset.pickup);if(b)openWa(b.whatsapp||ctx.cs,cartMessage(ctx.loc,b,true));$('modal-root').innerHTML='';return}});
 
 loadCart();syncCartUI();$('grid').innerHTML=Array.from({length:8},()=>'<div class="skeleton"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line s"></div></div>').join('');loadAll();
