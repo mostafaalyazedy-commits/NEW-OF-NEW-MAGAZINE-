@@ -4,8 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="">
+<meta property="og:title" content="عروض أوشن الحصرية">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="عروض أوشن الحصرية">
 
-<title></title>
+<title>عروض أوشن الحصرية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -3921,7 +3926,7 @@ function applyTheme(){
   const theme=String(setting('theme_color','')).trim(),meta=document.querySelector('meta[name="theme-color"]');if(meta&&theme)meta.content=theme;
 }
 function applyShell(){
-  document.title=String(setting('page_title',''));
+  document.title='عروض أوشن الحصرية';
   const brand=String(setting('brand_name_ar','')),short=String(setting('brand_short_ar','')),logo=String(setting('logo_url',''));
   $('brand-name').textContent=brand;$('brand-logo-fallback').textContent=short;
   const wrap=$('brand-logo-wrap'),img=$('brand-logo-img');img.alt=brand;
