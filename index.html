@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="boot-shop" data-build="v48-reliable-nearest-branch-order">
+<html lang="ar" dir="rtl" class="boot-shop" data-build="v53-final-quickview-image-fix">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -3387,6 +3387,13 @@ body.cat-world::before{opacity:.40}
   .rail-offer-img .second-item-50{--seal:55px!important}
 }
 
+
+/* V53 — QUICK VIEW IMAGE VISIBILITY */
+.qv-img{position:relative;min-height:300px;background:linear-gradient(160deg,var(--cat-tint,#F5F8FB),#fff)!important}
+.qv-img img.ocean-deferred{display:block!important;visibility:visible;max-width:94%!important;max-height:94%!important;width:auto;height:auto;object-fit:contain!important;margin:auto}
+.qv-img.img-empty::after{content:"تعذر تحميل الصورة";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#7A8694;font-size:12px;font-weight:800}
+@media(max-width:700px){.qv-img{height:300px!important;min-height:300px!important}}
+
 </style>
 </head>
 <body>
@@ -5130,7 +5137,20 @@ function openCart(){const t=cartTotals();const rows=[...CART.values()].map(v=>`<
 function openQuickView(id){
   const e=ID_MAP.get(id);if(!e)return;
   const q=CART.get(id)?.qty||0;
-  $('qv-root').innerHTML=`<div class="sheet-backdrop" data-close-qv></div><aside class="sheet show" style="transform:none"><div class="sheet-head"><h2>${esc(ui('product_details'))}</h2><button class="close" data-close-qv>×</button></div><div class="sheet-body"><div class="qv-img">${imageBlock(e,true,'w900')}</div><div class="qv-name">${esc(e.p.product_name_ar)}</div><div class="qv-sub">${esc(e.p.product_name_en||e.p.subtitle||'')}</div>${priceStack(e,'qv-stack')}${saveChip(e,'save','margin-top:10px')}<button class="add" style="width:100%;margin-top:16px" data-add="${esc(id)}">${esc(q?ui('add_another'):ui('add_to_cart'))}</button></div></aside>`;
+  const root=$('qv-root');
+  root.innerHTML=`<div class="sheet-backdrop" data-close-qv></div><aside class="sheet show" style="transform:none"><div class="sheet-head"><h2>${esc(ui('product_details'))}</h2><button class="close" data-close-qv>×</button></div><div class="sheet-body"><div class="qv-img">${imageBlock(e,true,'w900')}</div><div class="qv-name">${esc(e.p.product_name_ar)}</div><div class="qv-sub">${esc(e.p.product_name_en||e.p.subtitle||'')}</div>${priceStack(e,'qv-stack')}${saveChip(e,'save','margin-top:10px')}<button class="add" style="width:100%;margin-top:16px" data-add="${esc(id)}">${esc(q?ui('add_another'):ui('add_to_cart'))}</button></div></aside>`;
+
+  /* V53 — Quick View is injected after the normal page lazy-image pass.
+     Initialise its image engine immediately, then force its priority image to
+     activate now rather than waiting for IntersectionObserver. */
+  initLazyImages(root);
+  const qvImg=root.querySelector('.qv-img img.ocean-deferred[data-img-url]');
+  if(qvImg){
+    qvImg.style.visibility='visible';
+    const well=qvImg.closest('.qv-img');
+    if(well)well.classList.remove('img-empty');
+    activateLazyImage(qvImg);
+  }
 }
 
 function waUrl(number,msg){const n=String(number||'').replace(/\D/g,'');return n?`https://wa.me/${n}?text=${encodeURIComponent(msg)}`:''}
