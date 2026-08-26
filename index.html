@@ -1822,7 +1822,7 @@ body.cat-world::before{opacity:.40}
    without a single hardcoded font-size.
    ============================================================ */
 .badge{
-  --seal:clamp(52px,4.6vw,68px);
+  --seal:clamp(46px,4.0vw,60px);
   position:absolute;top:9px;right:9px;z-index:4;
   width:var(--seal)!important;height:var(--seal)!important;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -1859,19 +1859,19 @@ body.cat-world::before{opacity:.40}
 
 /* a mega discount earns a second ring and a size bump, nothing more */
 .badge[data-tier="mega"]{
-  --seal:clamp(58px,5.2vw,78px);
+  --seal:clamp(52px,4.6vw,70px);
   box-shadow:
     0 0 0 3px #fff,
     0 0 0 5.5px rgba(168,23,51,.28),
     0 11px 24px -5px var(--pr-ink)!important;
 }
-.badge[data-tier="hot"]{--seal:clamp(55px,4.9vw,72px)}
+.badge[data-tier="hot"]{--seal:clamp(49px,4.3vw,64px)}
 
 /* ============================================================
    2. COMBO SEALS — a quantity mechanic is gold, a mixed mechanic is split
    ============================================================ */
 .badge-combo{
-  --seal:clamp(58px,5.1vw,76px);          /* a special mechanic outranks a % */
+  --seal:clamp(50px,4.5vw,66px);          /* a special mechanic outranks a % */
   background:radial-gradient(118% 118% at 32% 16%,var(--gd-lite),var(--gd) 50%,var(--gd-deep) 100%)!important;
   color:var(--navy2);
   box-shadow:
@@ -1890,7 +1890,7 @@ body.cat-world::before{opacity:.40}
 /* 1+50% — a DIFFERENT silhouette (asymmetric squircle) and a two-band field,
    so it can never be mistaken for 1+1 even at thumbnail size. */
 .badge-combo[data-combo="split"]{
-  --seal:clamp(60px,5.4vw,80px);
+  --seal:clamp(52px,4.7vw,68px);
   border-radius:30% 30% 30% 9%!important;
   background:linear-gradient(180deg,var(--pr-lite) 0%,var(--pr) 43%,var(--gd) 43%,var(--gd-deep) 100%)!important;
   box-shadow:
@@ -1911,6 +1911,12 @@ body.cat-world::before{opacity:.40}
   font-size:1.36em;color:#4A2F02;line-height:1;letter-spacing:-.055em;
 }
 .badge-combo[data-combo="split"] .bd-sub{display:none}
+
+/* Product-card corner badges: slightly smaller and tucked in tighter */
+.card .badge,.shelf-card .badge,.rail-offer .badge,.mini-feature .badge{top:8px;right:8px}
+.card .badge .bd-sub,.shelf-card .badge .bd-sub,.rail-offer .badge .bd-sub,.mini-feature .badge .bd-sub{font-size:calc(var(--seal)*.155)}
+.card .badge .bd-value,.shelf-card .badge .bd-value,.rail-offer .badge .bd-value,.mini-feature .badge .bd-value{font-size:calc(var(--seal)*.40)}
+.card .badge-combo[data-combo="split"] .bd-combo,.shelf-card .badge-combo[data-combo="split"] .bd-combo,.rail-offer .badge-combo[data-combo="split"] .bd-combo,.mini-feature .badge-combo[data-combo="split"] .bd-combo{font-size:calc(var(--seal)*.245)}
 
 /* wording the parser does not recognise is printed verbatim on a gold pill —
    never reshaped, never reinterpreted */
